@@ -103,14 +103,17 @@ Both receive the **same** G->A converted query file as input.
 
 #### Step 3: Two alignment trials
 
-Bowtie2 is launched twice with orientation restrictions (bismark line 6845-6850):
-- `GAreadCTgenome` gets `--nofw` (only align to reverse complement of reference)
-- `GAreadGAgenome` gets `--norc` (only align forward to reference)
+Bowtie2 is launched twice with orientation restrictions (bismark line 6845-6850).
+The `--nofw`/`--norc` flags control the **query read orientation** (not the reference):
+- `--norc`: don't try revcomp of query -> align **query as-is** against reference
+- `--nofw`: don't try query as-is -> align **revcomp of query** against reference
 
-| Trial | Converted query | Genome index | Bowtie2 flag | Bismark strand |
-|-------|----------------|-------------|-------------|---------------|
-| 1 | `ACATCAATCA` (G->A) | CT genome | `--nofw` | CTOT |
-| 2 | `ACATCAATCA` (G->A) | GA genome | `--norc` | CTOB |
+Rule: when read conversion and genome conversion are the **same** (GA/GA or CT/CT), query aligns forward (`--norc`). When **different** (GA/CT or CT/GA), query aligns as revcomp (`--nofw`).
+
+| Trial | Converted query | Genome index | Bowtie2 flag | Query orientation | Bismark strand |
+|-------|----------------|-------------|-------------|------------------|---------------|
+| 1 | `ACATCAATCA` (G->A) | CT genome (`GAreadCTgenome`) | `--nofw` | revcomp of query | CTOT |
+| 2 | `ACATCAATCA` (G->A) | GA genome (`GAreadGAgenome`) | `--norc` | query as-is | CTOB |
 
 #### Step 4: Best alignment selection
 
@@ -168,10 +171,10 @@ For single-end directional, 2 filehandles (bismark line 7125-7139):
 
 #### Step 3: Two alignment trials
 
-| Trial | Converted query | Genome index | Bowtie2 flag | Bismark strand |
-|-------|----------------|-------------|-------------|---------------|
-| 1 | `TGTATGTATG` (C->T) | CT genome | `--norc` (forward only) | OT |
-| 2 | `TGTATGTATG` (C->T) | GA genome | `--nofw` (revcomp only) | OB |
+| Trial | Converted query | Genome index | Bowtie2 flag | Query orientation | Bismark strand |
+|-------|----------------|-------------|-------------|------------------|---------------|
+| 1 | `TGTATGTATG` (C->T) | CT genome (`CTreadCTgenome`) | `--norc` | query as-is | OT |
+| 2 | `TGTATGTATG` (C->T) | GA genome (`CTreadGAgenome`) | `--nofw` | revcomp of query | OB |
 
 #### Step 4: Best alignment selection
 
@@ -456,7 +459,7 @@ Same two genomes tried for each mate in both tools.
 | **Aligner** | Bowtie2 | BWA mem |
 | **R1 mode** | PBAT (`--pbat`) | PBAT (`-pbat`) |
 | **R2 mode** | **Standard directional** (no `--pbat`) | **PBAT** (`-pbat` applies to both) |
-| **R2 strand restriction** | Bowtie2 `--norc`/`--nofw` restricts orientation per trial | BWA mem reports both orientations freely |
+| **R2 strand restriction** | Bowtie2 `--norc`/`--nofw` restricts query orientation per trial | BWA mem reports both orientations freely |
 | **Pairing** | Independent single-end per mate | Paired-end: R1+R2 must form opposite-strand pair |
 | **Non-directional** | N/A (single-end) | `-nonDirectional` allows cross-genome pairing (Pairs C, D) |
 | **Ambiguity** | Rejects reads with tied best AS scores | Never rejects; always picks a winner (first seen if tied) |
@@ -475,7 +478,7 @@ Bhmem treats **both R1 and R2 as PBAT**. Yap treats **R1 as PBAT, R2 as standard
 
 While the read conversions end up the same (R1: G->A, R2: C->T), the **strand/orientation restrictions differ for R2**:
 
-- **Bismark R2** (standard directional): C->T query -> CT genome with `--norc` (forward only, OT), C->T query -> GA genome with `--nofw` (reverse only, OB)
+- **Bismark R2** (standard directional): C->T query as-is -> CT genome with `--norc` (OT), revcomp of C->T query -> GA genome with `--nofw` (OB)
 - **Bhmem R2** (PBAT): C->T query -> GA genome and CT genome with **no orientation restriction** from BWA mem
 
 This may explain why R2 shows more discrepancy in cross-pipeline comparisons.
