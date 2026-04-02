@@ -29,15 +29,27 @@
 *.fastq.gz
 *.allc.tsv.gz
 *.contact.tsv.gz
+*.hist.txt
 
-# Logs
-**/logs/
+# Large TSV/CSV data files (keep small ones)
+**/04.alignment/*.txt
+**/05.align_*/*.txt
 
 # Snakemake
 .snakemake/
 
-# Claude internal
+# Python cache
+__pycache__/
+
+# IDE / tool
+.cursor/
 .claude/
 
 # OS
 .DS_Store
+
+# Temp scripts
+push_to_github.sh
+push_ssh.sh
+add_all.sh
+add_specific.sh

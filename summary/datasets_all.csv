@@ -1,0 +1,10 @@
+path,label,type
+../methylhic/alignment/stats/MappingSummary.csv.gz,MethylHiC,yap
+../methylhic_new/alignment/stats/MappingSummary.csv.gz,MethylHiC-new,yap
+../snmCseq3/alignment/stats/MappingSummary.csv.gz,snmC-seq3,yap
+../scnomehic/alignment/stats/MappingSummary.csv.gz,scNOME-HiC,yap
+../smallwood/smallwood_qc_summary.csv,Smallwood,smallwood
+../scnome/scnome_qc_summary.csv,scNOMe,scnome
+../snmCseq2/snmcseq2_qc_summary.csv,snmC-seq2,snmcseq2
+../nagano/qc_summary.csv,Nagano,nagano
+../droplethic/my_project/qc_stats/SRR27586278_hg38.per_cell.tsv,DropletHiC,droplethic

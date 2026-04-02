@@ -1,0 +1,29 @@
+SRR6911770_1.rmdup.bam
+
+Parameters used to extract methylation information:
+Bismark Extractor Version: v0.24.2
+Bismark result file: single-end (SAM format)
+Ignoring first 6 bp
+Output specified: strand-specific (default)
+
+
+Processed 1827927 lines in total
+Total number of methylation call strings processed: 1827927
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	46149281
+
+Total methylated C's in CpG context:	1778299
+Total methylated C's in CHG context:	329539
+Total methylated C's in CHH context:	1430208
+
+Total C to T conversions in CpG context:	424726
+Total C to T conversions in CHG context:	9453570
+Total C to T conversions in CHH context:	32732939
+
+C methylated in CpG context:	80.7%
+C methylated in CHG context:	3.4%
+C methylated in CHH context:	4.2%
+
+

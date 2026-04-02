@@ -1,0 +1,17 @@
+ACA:	3	0.000%
+ACC:	4	0.000%
+ACG:	0	NaN%
+ACT:	3	0.000%
+CCA:	4	0.000%
+CCC:	2	0.000%
+CCG:	0	NaN%
+CCT:	1	0.000%
+GCA:	1	0.000%
+GCC:	0	NaN%
+GCG:	0	NaN%
+GCT:	1	0.000%
+TCA:	1	0.000%
+TCC:	2	0.000%
+TCG:	1	0.000%
+TCT:	7	0.000%
+

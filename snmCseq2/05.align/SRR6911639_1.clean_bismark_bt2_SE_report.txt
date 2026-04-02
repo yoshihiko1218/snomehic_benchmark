@@ -1,0 +1,40 @@
+Bismark report for: 03.trimmed_fastq/SRR6911639_1.clean.fq.gz (version: v0.24.2)
+Option '--pbat' specified: alignments to original strands (OT and OB) strands were ignored (i.e. not performed)
+Bismark was run with Bowtie 2 against the bisulfite genome of /gpfs/projects/b1198/epifluidlab/yoshii/reference/hg38_bismark/ with the specified options: -q --score-min L,0,-0.2 --ignore-quals
+
+Final Alignment report
+======================
+Sequences analysed in total:	3597886
+Number of alignments with a unique best hit from the different alignments:	2451939
+Mapping efficiency:	68.1%
+Sequences with no alignments under any condition:	942652
+Sequences did not map uniquely:	203295
+Sequences which were discarded because genomic sequence could not be extracted:	0
+
+Number of sequences with unique best (first) alignment came from the bowtie output:
+CT/CT:	0	((converted) top strand)
+CT/GA:	0	((converted) bottom strand)
+GA/CT:	1224890	(complementary to (converted) top strand)
+GA/GA:	1227049	(complementary to (converted) bottom strand)
+
+Final Cytosine Methylation Report
+=================================
+Total number of C's analysed:	65648059
+
+Total methylated C's in CpG context:	2774773
+Total methylated C's in CHG context:	306687
+Total methylated C's in CHH context:	1126636
+Total methylated C's in Unknown context:	1160
+
+Total unmethylated C's in CpG context:	794659
+Total unmethylated C's in CHG context:	14503282
+Total unmethylated C's in CHH context:	46142022
+Total unmethylated C's in Unknown context:	18484
+
+C methylated in CpG context:	77.7%
+C methylated in CHG context:	2.1%
+C methylated in CHH context:	2.4%
+C methylated in Unknown context (CN or CHN):	5.9%
+
+
+Bismark completed in 0d 0h 29m 44s

@@ -1,0 +1,9 @@
+Input:	05.align/SRR6911723_2.clean_bismark_bt2.bam
+TotalReads:	538861	100%
+Mapped:	538861	100.0000%
+MappedMapQ30:	24425	4.5327%
+MappedMapQ30ToLambda:	0	0.0000%
+MappedMapQ30ToTargetSpecies:	24425	100.0000%
+DuplicateMapped:	0	0.0000%
+SecondarySkipped:	0	0.0000%
+SupplementarySkipped:	0	0.0000%

@@ -1,0 +1,22 @@
+BisSNP version                                BisSNP-0.90
+Visited bases                                99630580
+Callable bases                               99578361
+Confidently called bases                     99446655
+Visited bases in Cpg island                               0
+Callable bases in Cpg island                               0
+Confidently called bases in Cpg island                     0
+% callable bases of all loci                 99.948
+% confidently called bases of all loci       99.815
+% confidently called bases of callable loci  99.868
+Actual calls made                            97505878
+Average good reads coverage in all visited loci                            0.9
+Average good reads coverage in callable position                            0.9
+Average good reads coverage in all position of Cpg island                           NaN
+Average good reads coverage in callable position of Cpg island                           NaN
+##Methylation summary in total:
+CH:	19181506	0.610%
+CG:	865059	77.729%
+##Methylation summary in Read Group:	snmCseq2
+CG:	865059	77.729%
+CH:	19181506	0.610%
+

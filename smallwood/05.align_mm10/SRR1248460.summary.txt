@@ -1,0 +1,9 @@
+Input:	./SRR1248460.SE.input_bismark_bt2.bam
+TotalReads:	7397151	100%
+Mapped:	7397151	100.0000%
+MappedMapQ30:	4890648	66.1153%
+MappedMapQ30ToLambda:	0	0.0000%
+MappedMapQ30ToTargetSpecies:	4890648	100.0000%
+DuplicateMapped:	0	0.0000%
+SecondarySkipped:	0	0.0000%
+SupplementarySkipped:	0	0.0000%

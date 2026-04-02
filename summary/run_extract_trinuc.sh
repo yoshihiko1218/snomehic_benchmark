@@ -1,0 +1,6 @@
+python extract_trinuc.py --folder /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/scnome/04.alignment/ --suffix .rmdup.RG.trinuc_methy.chr21.txt --output /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/summary/trinuc/scnome.chr21.txt
+python extract_trinuc.py --folder /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/smallwood/05.align_mm10/ --suffix .rmdup.RG.trinuc_methy.chr19.txt --output /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/summary/trinuc/smallwood.chr21.txt
+python extract_trinuc.py --folder /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCseq3/04.bhmem_bam/ --suffix .calmd.trinuc_methy.chr19.txt --output /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/summary/trinuc/snmCseq3.chr21.txt
+python extract_trinuc.py --folder /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCseq2/05.align/ --suffix .rmdup.RG.trinuc_methy.chr19.txt --output /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/summary/trinuc/snmCseq2.chr19.txt
+python extract_trinuc.py --folder /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCseq2/05.align/ --suffix .rmdup.RG.trinuc_methy.chr21.txt --output /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/summary/trinuc/snmCseq2.chr21.txt
+

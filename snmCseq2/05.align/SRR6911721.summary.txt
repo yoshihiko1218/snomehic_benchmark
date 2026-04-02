@@ -1,0 +1,12 @@
+TotalFragments:	361916	100%
+UniqMapped:	361916	100.0%
+UniqMappedMapQ30:	41066	11.34683186153693%
+UniqMappedMapQ30ToLambda:	0	0.0%
+UniqMappedMapQ30ToTargetSpecies:	41066	100.0%
+UniqMappedMapQ30NoPcr:	33589	81.79272390785565%
+UniqMappedMapQ30NoPcrToLambda:	0	0.0%
+UniqMappedMapQ30NoPcrToTargetSpecies:	33589	81.79272390785565%
+UniqMappedMapQ30NoPcrTrans:	0	0.0%
+UniqMappedMapQ30NoPcrCis:	33589	100.0%
+UniqMappedMapQ30NoPcrCisMore1kb:	0	0.0%
+UniqMappedMapQ30NoPcrCisMore20kb:	0	0.0%

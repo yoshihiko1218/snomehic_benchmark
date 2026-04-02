@@ -1,0 +1,17 @@
+Input:	04.alignment/SRR3729665_1.rmdup.RG.bam
+Layout:	SE
+NHtagDetected:	False
+TotalReads:	4239389	100%
+PrimaryMappedReads:	4239389	100.000000%
+UniqMappedReads:	4239389	100.000000%
+UniqMappedMapQ30Reads:	2672837	63.047694%
+UniqMappedMapQ30ReadsToLambda:	0	0.000000%
+UniqMappedMapQ30ReadsToTargetSpecies:	2672837	100.000000%
+DuplicatePrimaryMapped:	2818818	66.491138%
+SecondarySkipped:	0	0.000000%
+SupplementarySkipped:	0	0.000000%
+UnmappedSkipped:	0	0.000000%
+NotCountedDueToLayout:	0
+
+WARNING: NH tag not detected. 'UniqMapped' is approximated as primary mapped units, not strictly proven unique.
+INFO: Single-end BAM detected. Counts are read-based.
