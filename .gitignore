@@ -1,0 +1,43 @@
+# Data directories
+**/fastq/
+**/02.fastqc_out/
+**/03.trimmed_fastq/
+**/04.bhmem_bam/
+**/test_fastq/
+**/test_fastq_renamed/
+**/alignment/Group*/bam/
+**/alignment/Group*/fastq/
+**/alignment/Group*/allc/
+**/alignment/Group*/hic/
+**/alignment_bowtie1/Group*/bam/
+**/alignment_bowtie1/Group*/fastq/
+**/alignment_bowtie1/Group*/allc/
+**/alignment_bowtie1/Group*/hic/
+**/alignment_mapq0/Group*/bam/
+**/alignment_mapq0/Group*/fastq/
+**/alignment_mapq0/Group*/allc/
+**/alignment_mapq0/Group*/hic/
+**/mapq_comparison/SRR*/
+
+# BAM files
+*.bam
+*.bam.bai
+*.bai
+
+# Large data
+*.fq.gz
+*.fastq.gz
+*.allc.tsv.gz
+*.contact.tsv.gz
+
+# Logs
+**/logs/
+
+# Snakemake
+.snakemake/
+
+# Claude internal
+.claude/
+
+# OS
+.DS_Store
