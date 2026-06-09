@@ -4,14 +4,14 @@
 Reason: GM12878 must clip 6 bp from BOTH ends (Pott 2017); previous run used 5'-only.
 acc_list.txt trimmed to 34 cells (controls SRR3729654-3729660 removed; backup
 `acc_list_with_controls.txt`). All step arrays scoped to `--array=1-12` (GM cells).
-Submit order (each depends on the previous):
-1. `bash codes/clear_gm_stale.sh --yes`     # delete 842 stale GM files
-2. `bash codes/clear_control_files.sh --yes` # delete 258 control files (optional)
-3. `sbatch codes/01.trim.sh`
-4. `sbatch --dependency=afterok:<jobid1> codes/02.alignment.sh`
-5. `sbatch --dependency=afterok:<jobid2> codes/03.methy_extract.sh`
-6. `sbatch --dependency=afterok:<jobid3> codes/run_qc.sh`
-Record job IDs here once submitted.
+Deletions DONE (2026-06-09): stale GM outputs + control files cleared.
+Note: raw reads are gzipped `01.fastq/<p>_{1,2}.fq.gz`; 01.trim.sh now reads
+`.fq.gz` (was `.fastq`), and scnome_qc_per_cell.py accepts either trim-report name.
+
+Submit the whole chain with ONE command:
+- `bash codes/submit_gm_rerun.sh`
+  -> 01.trim -> 02.alignment -> 03.methy_extract -> run_qc (each afterok the prev).
+Record the printed job IDs here once submitted.
 
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
