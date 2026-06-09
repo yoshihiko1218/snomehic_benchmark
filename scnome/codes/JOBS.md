@@ -11,7 +11,14 @@ Note: raw reads are gzipped `01.fastq/<p>_{1,2}.fq.gz`; 01.trim.sh now reads
 Submit the whole chain with ONE command:
 - `bash codes/submit_gm_rerun.sh`
   -> 01.trim -> 02.alignment -> 03.methy_extract -> run_qc (each afterok the prev).
-Record the printed job IDs here once submitted.
+
+SUBMITTED 2026-06-09 (array 1-12 = GM12878):
+- 01.trim.sh          : 4257035
+- 02.alignment.sh     : 4257036  (afterok 4257035)
+- 03.methy_extract.sh : 4257037  (afterok 4257036)
+- run_qc.sh           : 4257038  (afterok 4257037)
+Logs: logs/01.qc_trim/, logs/02.bisqc/, logs/03.methy_extract/, logs/03.qc/
+Monitor: squeue -u jmj7858
 
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
