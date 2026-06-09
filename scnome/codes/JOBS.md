@@ -17,6 +17,17 @@ SUBMITTED 2026-06-09 (array 1-12 = GM12878):
 - 02.alignment.sh     : 4257036  (afterok 4257035)
 - 03.methy_extract.sh : 4257037  (afterok 4257036)
 - run_qc.sh           : 4257038  (afterok 4257037)
+=> FAILED. Root cause: 01.trim.sh `cd` pointed at nonexistent b1198 path, so
+   acc_list.txt was not found, prefix empty, trim_galore ran on missing files
+   yet exited 0; 02.alignment then ran with no trimmed input and FAILED; 03/qc
+   DependencyNeverSatisfied (cancelled 4257037/4257038). 01.trim's 25s runtime
+   was the tell. Fixed cd (b1198->b1042) + added fail-fast guards.
+
+RESUBMITTED 2026-06-09 (array 1-12 = GM12878):
+- 01.trim.sh          : 4258488
+- 02.alignment.sh     : 4258489  (afterok 4258488)
+- 03.methy_extract.sh : 4258490  (afterok 4258489)
+- run_qc.sh           : 4258491  (afterok 4258490)
 Logs: logs/01.qc_trim/, logs/02.bisqc/, logs/03.methy_extract/, logs/03.qc/
 Monitor: squeue -u jmj7858
 
