@@ -18,6 +18,14 @@ conda activate scnomehic
 prefix=`cat acc_list.txt | awk -v num=${SLURM_ARRAY_TASK_ID} 'NR == num'`
 echo ${prefix}
 
+# Exclude control / spike-in samples (SRR3729654-SRR3729660) from analysis.
+# GM12878: SRR3729642-SRR3729653 ; K562: SRR3729661-SRR3729682
+srr_num=${prefix#SRR}
+if [ "${srr_num}" -ge 3729654 ] && [ "${srr_num}" -le 3729660 ]; then
+  echo "${prefix} is a control sample (excluded from analysis). Skipping."
+  exit 0
+fi
+
 input=03.trimmed_fastq
 outdir=04.alignment
 methydir=05.methy
