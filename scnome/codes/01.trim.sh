@@ -42,8 +42,9 @@ else
 fi
 echo "Cell type: ${celltype}; trim_galore clip args: ${clip_args}"
 
-fastqc --outdir ${outfolder} -t 8 ${infolder}/${prefix}_1.fastq ${infolder}/${prefix}_2.fastq
+# Raw reads are gzipped (${prefix}_{1,2}.fq.gz). trim_galore/fastqc accept gzip.
+fastqc --outdir ${outfolder} -t 8 ${infolder}/${prefix}_1.fq.gz ${infolder}/${prefix}_2.fq.gz
 echo "First fastqc Done"
 
-trim_galore --quality 30 --phred33 --illumina --stringency 1 -e 0.1 ${clip_args} --gzip --length 20 -j 8 -o ${outfolder_fq} --fastqc --fastqc_args "--outdir ${outfolder} -t 8" ${infolder}/${prefix}_1.fastq ${infolder}/${prefix}_2.fastq
+trim_galore --quality 30 --phred33 --illumina --stringency 1 -e 0.1 ${clip_args} --gzip --length 20 -j 8 -o ${outfolder_fq} --fastqc --fastqc_args "--outdir ${outfolder} -t 8" ${infolder}/${prefix}_1.fq.gz ${infolder}/${prefix}_2.fq.gz
 echo "Trimming Done"

@@ -74,7 +74,14 @@ def collect_trim_stats(project_dir, prefix):
     trim_dir = project_dir / "03.trimmed_fastq"
     stats = {}
     for read_num, label in [("1", "R1"), ("2", "R2")]:
-        rpt = trim_dir / f"{prefix}_{read_num}.fastq_trimming_report.txt"
+        # Trim Galore names the report after the input file. Cells re-trimmed
+        # from .fq.gz inputs get "<p>_<n>.fq.gz_trimming_report.txt"; older runs
+        # from .fastq inputs get "<p>_<n>.fastq_trimming_report.txt". Try both.
+        candidates = [
+            trim_dir / f"{prefix}_{read_num}.fq.gz_trimming_report.txt",
+            trim_dir / f"{prefix}_{read_num}.fastq_trimming_report.txt",
+        ]
+        rpt = next((c for c in candidates if c.exists()), candidates[-1])
         if not rpt.exists():
             print(f"  [WARN] Missing trim report: {rpt}")
         parsed = parse_trim_galore_report(rpt)
