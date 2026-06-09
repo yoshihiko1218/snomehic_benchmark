@@ -40,6 +40,17 @@ both-ends clipping, scope a GM12878 rerun, and remove control samples.
   `bash codes/clear_gm_stale.sh --yes` and `bash codes/clear_control_files.sh --yes`.
 - GM rerun jobs NOT submitted yet (see codes/JOBS.md submit order).
 
+## GM rerun execution
+- Submitted chain 4257035-4257038 -> FAILED. Cause: 01.trim.sh `cd` used wrong
+  project path (b1198 vs b1042); acc_list.txt not found, empty prefix, trim ran
+  on missing files but exited 0; 02.alignment FAILED on no input; 03/qc never ran.
+- Also fixed earlier: 01.trim referenced `.fastq` inputs but raw reads are
+  `.fq.gz`; QC parser now accepts either trim-report name.
+- Fixed cd path + added fail-fast guards (bad cd / empty prefix / missing input /
+  trim failure / missing output). Cancelled 4257037,4257038.
+- Resubmitted chain 4258488(trim)->4258489(align)->4258490(methy)->4258491(qc).
+  01.trim now RUNNING all 12 tasks (no longer instant-failing). Monitoring.
+
 ## Commits
 - cfd2cc1 — per-cell-type clipping + exclude controls (earlier).
 - (this session) — GM rerun scoping, alignment chain enable, acc_list trim, helpers, docs.
