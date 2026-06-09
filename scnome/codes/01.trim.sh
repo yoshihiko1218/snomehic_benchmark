@@ -5,7 +5,7 @@
 #SBATCH -N 1
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=8
-#SBATCH --array=1-41
+#SBATCH --array=1-12
 #SBATCH --job-name=qc
 #SBATCH --output=logs/01.qc_trim/qc_trim.%a.txt
 #SBATCH --error=logs/01.qc_trim/qc_trim.%a.err
