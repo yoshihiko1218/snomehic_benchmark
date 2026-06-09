@@ -11,16 +11,22 @@
 #SBATCH --error=logs/01.qc_trim/qc_trim.%a.err
 
 source /home/jmj7858/.bashrc
-cd /gpfs/projects/b1198/epifluidlab/yoshii/scnomehic_paper/benchmark/scnome
+# Fail-fast: a bad cd must abort the job, not silently run in the wrong dir.
+cd /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/scnome || { echo "ERROR: cd to working dir failed"; exit 1; }
 
 conda activate scnomehic
 
 infolder=01.fastq
 outfolder=02.fastqc_out
 outfolder_fq=03.trimmed_fastq
+mkdir -p ${outfolder} ${outfolder_fq}
 
 prefix=`cat acc_list.txt | awk -v num=${SLURM_ARRAY_TASK_ID} 'NR == num'`
 echo ${prefix}
+if [ -z "${prefix}" ]; then echo "ERROR: empty prefix for array task ${SLURM_ARRAY_TASK_ID}"; exit 1; fi
+if [ ! -s "${infolder}/${prefix}_1.fq.gz" ] || [ ! -s "${infolder}/${prefix}_2.fq.gz" ]; then
+  echo "ERROR: missing input ${infolder}/${prefix}_{1,2}.fq.gz"; exit 1
+fi
 
 # Classify sample by SRR accession number and set trimming accordingly:
 #   SRR3729642-SRR3729653 : GM12878 cells -> clip 6 bp from BOTH ends
@@ -46,5 +52,12 @@ echo "Cell type: ${celltype}; trim_galore clip args: ${clip_args}"
 fastqc --outdir ${outfolder} -t 8 ${infolder}/${prefix}_1.fq.gz ${infolder}/${prefix}_2.fq.gz
 echo "First fastqc Done"
 
-trim_galore --quality 30 --phred33 --illumina --stringency 1 -e 0.1 ${clip_args} --gzip --length 20 -j 8 -o ${outfolder_fq} --fastqc --fastqc_args "--outdir ${outfolder} -t 8" ${infolder}/${prefix}_1.fq.gz ${infolder}/${prefix}_2.fq.gz
+trim_galore --quality 30 --phred33 --illumina --stringency 1 -e 0.1 ${clip_args} --gzip --length 20 -j 8 -o ${outfolder_fq} --fastqc --fastqc_args "--outdir ${outfolder} -t 8" ${infolder}/${prefix}_1.fq.gz ${infolder}/${prefix}_2.fq.gz || { echo "ERROR: trim_galore failed"; exit 1; }
+
+# Verify both trimmed outputs exist so the downstream alignment never runs empty.
+for m in 1 2; do
+  if [ ! -s "${outfolder_fq}/${prefix}_${m}_trimmed.fq.gz" ]; then
+    echo "ERROR: expected trimmed output ${outfolder_fq}/${prefix}_${m}_trimmed.fq.gz missing"; exit 1
+  fi
+done
 echo "Trimming Done"
