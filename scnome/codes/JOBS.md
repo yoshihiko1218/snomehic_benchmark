@@ -31,6 +31,15 @@ RESUBMITTED 2026-06-09 (array 1-12 = GM12878):
 Logs: logs/01.qc_trim/, logs/02.bisqc/, logs/03.methy_extract/, logs/03.qc/
 Monitor: squeue -u jmj7858
 
+STATUS 2026-06-09 ~18:21:
+- 01.trim (4258488): all 12 COMPLETED (3-9 min each). 24 trimmed .fq.gz present.
+  GM both-ends clip CONFIRMED in report (6 bp 5' AND 6 bp 3').
+- 02.alignment (4258489): all 12 RUNNING, bismark progressing, no errors.
+- 03.methy (4258490) / run_qc (4258491): PENDING (dependency).
+- Note: 28-byte *.rmdup.bam at 17:39 are stale leftovers from the failed first
+  chain; current run overwrites them after bismark. (02.alignment.sh has no
+  fail-fast; harmless here since bismark is succeeding.)
+
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
 - **Job name:** methyext
