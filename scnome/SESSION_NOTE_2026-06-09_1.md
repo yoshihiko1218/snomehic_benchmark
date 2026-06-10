@@ -51,6 +51,18 @@ both-ends clipping, scope a GM12878 rerun, and remove control samples.
 - Resubmitted chain 4258488(trim)->4258489(align)->4258490(methy)->4258491(qc).
   01.trim now RUNNING all 12 tasks (no longer instant-failing). Monitoring.
 
+## GM rerun COMPLETE (2026-06-10 ~00:50)
+- Chain 4258488->4258489->4258490->4258491 all COMPLETED (exit 0).
+- Mid-run fixes applied: (1) 01.trim cd b1198->b1042 + fail-fast guards;
+  (2) 01.trim input .fastq->.fq.gz (raw reads are gzipped); (3) QC parser accepts
+  either .fq.gz/.fastq trim-report name.
+- Verified outputs (GM SRR3729642-3729653): 24 trimmed.fq.gz; 12/12 cells x4
+  real rmdup(.RG).bam; 24 NOMe.CpG.cov.gz + 24 NOMe.GpC.cov.gz; 12 qc_stats csv.
+- GM both-ends clip (6bp 5'+3') confirmed in trimming reports. No real errors.
+- Known: QC columns from the old Bis-tools route are blank (route not in Bismark
+  pipeline). Optional next: run_qc_and_collect.sh to rebuild summary over 34 cells.
+- Monitoring stopped.
+
 ## Commits
 - cfd2cc1 — per-cell-type clipping + exclude controls (earlier).
 - (this session) — GM rerun scoping, alignment chain enable, acc_list trim, helpers, docs.

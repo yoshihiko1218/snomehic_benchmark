@@ -55,6 +55,19 @@ STATUS 2026-06-09 ~21:59:
   Next: coverage2cytosine --nome-seq -> NOMe.{CpG,GpC} reports.
 - run_qc (4258491): PENDING (afterok 03).
 
+FINAL STATUS 2026-06-10 ~00:50 — GM12878 RERUN COMPLETE (all 4 jobs exit 0):
+- 01.trim     (4258488): 12/12 COMPLETED. GM both-ends clip applied (6bp 5'+3').
+- 02.alignment(4258489): 12/12 COMPLETED. All cells: real _1/_2 rmdup(.RG).bam.
+- 03.methy    (4258490): 12/12 COMPLETED. 24 NOMe.CpG.cov.gz + 24 NOMe.GpC.cov.gz.
+- run_qc      (4258491): 12/12 COMPLETED (~26s each). 12 qc_stats/*.qc_stats.csv.
+Verified: 24 trimmed.fq.gz, 12/12 cells x4 real BAMs, 24+24 NOMe cov.gz, 12 QC csv.
+No errors (only benign 'could not extract chromosomal sequence ..._random').
+NOTE: QC columns sourced from the OLD Bis-tools route (HCG/GCH_site_count,
+chrM/chr21 trinuc rates) are blank for these cells - that route is not part of
+the Bismark pipeline. Core Trim/Bismark/BAM/methyl metrics are populated.
+NEXT (optional): `sbatch codes/run_qc_and_collect.sh` to rebuild
+scnome_qc_summary.csv across ALL 34 cells (GM rerun + existing K562).
+
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
 - **Job name:** methyext
