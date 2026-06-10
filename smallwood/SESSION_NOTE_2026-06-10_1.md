@@ -41,6 +41,33 @@ benchmark.
 - 05.hcg_nome (`smwhcg`): script ready, **NOT yet submitted**.
   Submit: `sbatch codes/05.hcg_nome.sh` then run count_hcg_sites.py.
 
+## Trinuc QC — Bismark vs BisSNP investigation + unified summary
+- 05.hcg_nome (smwhcg 4299883): 32/32 DONE. HCG ~46% of all-CpG (ACG/TCG).
+- Compared Smallwood BisSNP `trinuc_methy` (literal ACG, position-level) vs
+  Bismark-native `nome_qc_sites_trinuc.py` (pooled HCG class, read-level):
+  chr19_endo 77.6% vs 57.7%. Gap is DEFINITION+AGGREGATION, not filtering
+  (MAPQ30+dedup moved it <1pt). BisSNP pooled-HCG = 69.2% (verified).
+- DECISION: standardize on BisSNP (SNP-aware, MAPQ/coverage filtered, pile-up
+  robust), re-parsed with POOLED context classes — both arms already have
+  `*.trinuc_methy.*` files (Smallwood 03.bisqc; scNOMe 04.qc_bissnp_trinuc).
+- NEW shared tools (benchmark root):
+  - `parse_bissnp_trinuc.py` — pools trinuc_methy into HCG/GCH/noncpg (skips
+    0-cov 'NaN%' rows; bug found: 0*NaN poisoned SRR3729651 chrM).
+  - `build_trinuc_summary.py` -> `trinuc_qc_summary.csv` (long format, 55 cells:
+    32 Smallwood ESC + 23 scNOMe GM/K562; chrM + autosome).
+- FINDINGS: conversion control reliable on AUTOSOME (n~3-6e5), chrM too sparse
+  for scNOMe (n~343). Autosome noncpg: scNOMe 0.50% / Smallwood 0.95% (~99% conv).
+  GCH: scNOMe 13.4% (NOMe accessibility) vs Smallwood 0.78% (no enzyme). HCG
+  31.7% vs 50.7% = cell-type biology (GM/K562 vs ESC), not QC.
+- Edited shared `scnome/codes/nome_qc_sites_trinuc.py` for no-mate cells
+  (backward-compatible). Commits: 3b240d1, +trinuc parser/summary commits.
+
+## Scratch files to remove (rm was permission-blocked this session)
+- `smallwood/06.methy/_hcg_test/`, `smallwood/qc_stats/trinuc_bismark/`,
+  `smallwood/qc_stats/trinuc_filter_test/`, helper scripts
+  `smallwood/codes/_compare_trinuc.sh`, `_test_trinuc_filter.sh`, `_test_hcg_one.sh`.
+
 ## Next
-- Confirm `_test_hcg_one.sh` output (HCG cov rows) then submit 05.hcg_nome.
 - Optional: implement high-coverage region exclusion; quantify human-depletion %.
+- smallwood_qc.py still reports literal-ACG BisSNP chrM/chr19 cols — superseded
+  by trinuc_qc_summary.csv for benchmark; flag/replace if rebuilding QC table.
