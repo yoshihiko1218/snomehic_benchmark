@@ -70,23 +70,42 @@ def parse_trim_galore_report(path):
     return stats
 
 
-def collect_trim_stats(project_dir, prefix):
+def collect_trim_stats(project_dir, prefix, runs=None):
+    """Trim Galore stats. For a multi-run cell (e.g. merged K562, runs=[r1,r2])
+    the per-run reports are summed; percentages are recomputed from the sums."""
+    runs = runs or [prefix]
     trim_dir = project_dir / "03.trimmed_fastq"
+    counts = ["InputReads", "ReadsWithAdapters", "QualityTrimmedBP",
+              "TrimmedReads", "TrimmedBP"]
     stats = {}
     for read_num, label in [("1", "R1"), ("2", "R2")]:
-        # Trim Galore names the report after the input file. Cells re-trimmed
-        # from .fq.gz inputs get "<p>_<n>.fq.gz_trimming_report.txt"; older runs
-        # from .fastq inputs get "<p>_<n>.fastq_trimming_report.txt". Try both.
-        candidates = [
-            trim_dir / f"{prefix}_{read_num}.fq.gz_trimming_report.txt",
-            trim_dir / f"{prefix}_{read_num}.fastq_trimming_report.txt",
-        ]
-        rpt = next((c for c in candidates if c.exists()), candidates[-1])
-        if not rpt.exists():
-            print(f"  [WARN] Missing trim report: {rpt}")
-        parsed = parse_trim_galore_report(rpt)
-        for k, v in parsed.items():
-            stats[f"Trim_{label}_{k}"] = v
+        agg = {k: 0 for k in counts}
+        found = False
+        for run in runs:
+            # Trim Galore names the report after the input file (.fq.gz or .fastq).
+            candidates = [
+                trim_dir / f"{run}_{read_num}.fq.gz_trimming_report.txt",
+                trim_dir / f"{run}_{read_num}.fastq_trimming_report.txt",
+            ]
+            rpt = next((c for c in candidates if c.exists()), None)
+            if rpt is None:
+                continue
+            parsed = parse_trim_galore_report(rpt)
+            if parsed:
+                found = True
+                for k in counts:
+                    if k in parsed:
+                        agg[k] += parsed[k]
+        if not found:
+            print(f"  [WARN] No trim report for {prefix} R{read_num} (runs={runs})")
+            continue
+        for k in counts:
+            stats[f"Trim_{label}_{k}"] = agg[k]
+        if agg["InputReads"] > 0:
+            stats[f"Trim_{label}_ReadsWithAdapters_Pct"] = \
+                round(agg["ReadsWithAdapters"] / agg["InputReads"] * 100, 3)
+            stats[f"Trim_{label}_TrimmedReads_Pct"] = \
+                round(agg["TrimmedReads"] / agg["InputReads"] * 100, 3)
     return stats
 
 
@@ -141,22 +160,45 @@ def parse_bismark_se_report(path):
     return stats
 
 
-def collect_bismark_stats(project_dir, prefix):
+def collect_bismark_stats(project_dir, prefix, runs=None):
     """
-    Collect Bismark SE report for R1 and R2.
-
-    Bismark with --prefix PREFIX on input {prefix}_{N}_trimmed.fq.gz produces:
-        04.alignment/{prefix}.{prefix}_{N}_trimmed_bismark_bt2_SE_report.txt
+    Mapping efficiency from the Bismark SE alignment report(s)
+        04.alignment/{run}.{run}_{N}_trimmed_bismark_bt2_SE_report.txt
+    (summed across a cell's runs for merged cells), and methylation context
+    rates from the POST-DEDUP extractor splitting report
+        05.methy/{prefix}_{N}.rmdup_splitting_report.txt
+    so mCG/mCHG/mCHH reflect the deduplicated reads used for the calls.
     """
+    runs = runs or [prefix]
     align_dir = project_dir / "04.alignment"
+    methy_dir = project_dir / "05.methy"
     stats = {}
     for read_num, label in [("1", "R1"), ("2", "R2")]:
-        rpt = align_dir / f"{prefix}.{prefix}_{read_num}_trimmed_bismark_bt2_SE_report.txt"
-        if not rpt.exists():
-            print(f"  [WARN] Missing Bismark report: {rpt}")
-        parsed = parse_bismark_se_report(rpt)
-        for k, v in parsed.items():
-            stats[f"Bismark_{label}_{k}"] = v
+        # --- mapping: sum SE alignment reports over runs ---
+        agg = {"TotalReads": 0, "UniqMapped": 0, "Unmapped": 0, "Ambiguous": 0}
+        any_map = False
+        for run in runs:
+            rpt = align_dir / f"{run}.{run}_{read_num}_trimmed_bismark_bt2_SE_report.txt"
+            parsed = parse_bismark_se_report(rpt)
+            if parsed:
+                any_map = True
+                for k in agg:
+                    if k in parsed:
+                        agg[k] += parsed[k]
+        if any_map:
+            for k in ("TotalReads", "UniqMapped", "Unmapped", "Ambiguous"):
+                stats[f"Bismark_{label}_{k}"] = agg[k]
+            if agg["TotalReads"] > 0:
+                stats[f"Bismark_{label}_MappingRate"] = \
+                    round(agg["UniqMapped"] / agg["TotalReads"] * 100, 3)
+        else:
+            print(f"  [WARN] No Bismark SE report for {prefix} R{read_num} (runs={runs})")
+        # --- methylation: post-dedup splitting report (per cell) ---
+        split = methy_dir / f"{prefix}_{read_num}.rmdup_splitting_report.txt"
+        sp = parse_bismark_se_report(split)  # parses mCG/mCHG/mCHH/TotalC lines
+        for k in ("mCG_Rate", "mCHG_Rate", "mCHH_Rate", "TotalC"):
+            if k in sp:
+                stats[f"Bismark_{label}_{k}"] = sp[k]
     return stats
 
 
@@ -281,6 +323,21 @@ def collect_site_and_trinuc_stats(project_dir, prefix):
                 total += n
         stats[f"{context_label}_site_count"] = total if total > 0 else None
 
+    # Bismark route has no Bis-tools 6plus2 beds -> fall back to the NOMe cov
+    # detected-site counts written by nome_qc_sites_trinuc.py (qc_stats/<cell>.nome_qc.tsv).
+    if stats.get("HCG_site_count") is None or stats.get("GCH_site_count") is None:
+        nq = project_dir / "qc_stats" / f"{prefix}.nome_qc.tsv"
+        if nq.exists():
+            try:
+                lines = nq.read_text().strip().splitlines()
+                hdr = lines[0].split(","); row = lines[1].split(",")
+                nd = dict(zip(hdr, row))
+                for key in ("HCG_site_count", "GCH_site_count"):
+                    if stats.get(key) is None and nd.get(key) not in (None, ""):
+                        stats[key] = int(float(nd[key]))
+            except Exception as e:
+                print(f"  [nome_qc err {nq.name}: {e}]")
+
     # trinuc rates — average R1 and R2 for each chrom
     for chrom in ("chrM", "chr21"):
         for ctx, label in [("ACT", "noncpg"), ("ACG", "endo"), ("GCT", "exo")]:
@@ -387,11 +444,11 @@ def add_derived_stats(stats):
 # Collect all for one cell
 # ═══════════════════════════════════════════════════════════════════
 
-def collect_cell_stats(prefix, project_dir, mapq_cutoff=30):
+def collect_cell_stats(prefix, project_dir, mapq_cutoff=30, runs=None):
     project_dir = pathlib.Path(project_dir)
     stats = OrderedDict({"CellID": prefix})
-    stats.update(collect_trim_stats(project_dir, prefix))
-    stats.update(collect_bismark_stats(project_dir, prefix))
+    stats.update(collect_trim_stats(project_dir, prefix, runs))
+    stats.update(collect_bismark_stats(project_dir, prefix, runs))
     stats.update(collect_bam_summary_stats(project_dir, prefix))
     stats.update(collect_site_and_trinuc_stats(project_dir, prefix))
     stats.update(collect_bisqc_stats(project_dir, prefix))
@@ -411,12 +468,17 @@ def main():
     parser.add_argument("--project_dir", required=True, help="Root of scnome project dir")
     parser.add_argument("--output_dir", required=True, help="Dir for per-cell .qc_stats.csv")
     parser.add_argument("--mapq", type=int, default=30, help="MAPQ cutoff (default: 30)")
+    parser.add_argument("--runs", default="",
+                        help="Comma-separated run IDs whose per-run trim/Bismark "
+                             "reports make up this cell (e.g. merged K562: SRR1,SRR2). "
+                             "Default: the cell is its own single run.")
     args = parser.parse_args()
 
     pathlib.Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+    runs = [r for r in args.runs.split(",") if r] or None
 
-    print(f"Processing cell: {args.cell_id}")
-    stats = collect_cell_stats(args.cell_id, args.project_dir, mapq_cutoff=args.mapq)
+    print(f"Processing cell: {args.cell_id}" + (f"  runs={runs}" if runs else ""))
+    stats = collect_cell_stats(args.cell_id, args.project_dir, mapq_cutoff=args.mapq, runs=runs)
     n = sum(1 for k, v in stats.items() if k != "CellID" and v not in (None, "", 0))
     print(f"  Collected {n} non-zero metrics")
 
