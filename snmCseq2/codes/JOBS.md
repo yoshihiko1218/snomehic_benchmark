@@ -56,3 +56,14 @@
 ### Status checks
 - `squeue -u jmj7858 | grep sc2_yap`
 - On failure: `codes/logs/07.yap_mc/sc2_yap_<genome>.<id>.err`
+
+### 07.yap_mc — FIX 1 (bismark_reference NameError) + resubmit
+- **Bug:** first run (4327550/4327551) finished in ~3 min producing ZERO bam/allc.
+  Cause: `cemba_data/mapping/pipelines/mc.py` drops `bismark_reference` from the
+  Snakefile header when the config still contains a `hisat3n_dna_reference` key
+  (yap `default-mapping-config` leaves a placeholder line). The mc.Snakefile template
+  calls `bismark {bismark_reference}` -> `NameError: name 'bismark_reference' is unknown`.
+- **Fix:** `codes/08.fix_bismark_config.sh` deletes the `hisat3n_dna_reference` line from
+  all 4 configs (2 source + 2 copied), then `yap update-snakemake -o yap_mapping_<g>`
+  regenerates Snakefiles. Verified header now has `bismark_reference = '<path>'` (line 20).
+- **Resubmitted:** sc2_yap_hg38 = **4330289**, sc2_yap_mm10 = **4330290** (array 1-64).
