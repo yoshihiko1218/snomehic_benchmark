@@ -47,6 +47,14 @@ STATUS 2026-06-09 ~19:50:
   Non-directional library confirmed (CT/CT, CT/GA, GA/CT, GA/GA all present).
 - 03.methy (4258490) starts only after ALL 12 alignment tasks finish (afterok).
 
+STATUS 2026-06-09 ~21:59:
+- 02.alignment (4258489): ALL 12 COMPLETED (exit 0). 12/12 GM cells have all 4
+  real BAMs (_1/_2 x rmdup/rmdup.RG, >1MB). Stale 28-byte files all overwritten.
+- 03.methy_extract (4258490): RUNNING all 12 (~11 min). bismark_methylation_extractor
+  producing .bismark.cov.gz/bedGraph/M-bias/splitting reports. No errors yet.
+  Next: coverage2cytosine --nome-seq -> NOMe.{CpG,GpC} reports.
+- run_qc (4258491): PENDING (afterok 03).
+
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
 - **Job name:** methyext
