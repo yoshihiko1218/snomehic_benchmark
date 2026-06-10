@@ -45,5 +45,8 @@ export OMP_NUM_THREADS="${SLURM_CPUS_PER_TASK:-1}"
 export TMPDIR="${BASE}/mapping/.slurm_tmp/${SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID}"
 mkdir -p "${TMPDIR}"
 
-eval "${CMD}"
+# Release any stale lock left by a previously cancelled run, then map.
+# --rerun-incomplete redoes outputs that were killed mid-write while reusing valid ones.
+eval "${CMD} --unlock" || true
+eval "${CMD} --rerun-incomplete"
 echo "[$(date)] DONE"
