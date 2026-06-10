@@ -53,3 +53,12 @@ push_to_github.sh
 push_ssh.sh
 add_all.sh
 add_specific.sh
+
+# snmCAT yap mct outputs (generated)
+**/mapping/Group*/bam/
+**/mapping/Group*/fastq/
+**/mapping/Group*/allc/
+**/mapping/Group*/rna_bam/
+**/mapping/.slurm_tmp/
+**/mapping_probe*/
+**/codes/logs/
