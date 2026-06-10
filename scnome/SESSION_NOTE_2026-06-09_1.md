@@ -63,6 +63,20 @@ both-ends clipping, scope a GM12878 rerun, and remove control samples.
   pipeline). Optional next: run_qc_and_collect.sh to rebuild summary over 34 cells.
 - Monitoring stopped.
 
+## ALL COMPLETE (2026-06-10)
+- GM rerun (both-ends clip): 12 cells through trim->align->dedup->methy->QC.
+- K562: 11 merged cells (consecutive SRR pairs) via merge-2-runs -> dedup once ->
+  methy. K562 methy (4288786) + NOMe QC (4289056) both 11/11 COMPLETED.
+- NOMe cov: GM 24+24, K562 22+22 (CpG+GpC). nome_qc.tsv: GM 12 + K562 11.
+- BisSNP trinuc (original method; needs Java 8 module jdk1.8.0_191): 46 chrM +
+  46 chr21 trinuc_methy files. Validated; chr21 conv ~0.3% (GM).
+- Compared to gm_sc_new (scNOMe-HiC, 188 cells): conversion & CpG comparable;
+  GpC accessibility much higher in gm_sc_new (~65% vs ~18%) = stronger enzyme/
+  accessibility signal in the in-house scNOMe-HiC protocol.
+- Renamed codes/ by execution stage (01/02/02k/03/03k/04.qc_*, submit_*, util_*).
+- Optional remaining: 04.qc_collect.sh to rebuild scnome_qc_summary.csv.
+- Monitoring stopped.
+
 ## Commits
 - cfd2cc1 — per-cell-type clipping + exclude controls (earlier).
 - (this session) — GM rerun scoping, alignment chain enable, acc_list trim, helpers, docs.

@@ -99,9 +99,22 @@ GATK-3.8 walker discovery fails on the conda env's Java 21. Validated on
 SRR3729642 chrM (exit 0, 16 N-C-N contexts).
 - GM trinuc   (4290691): array 1-12, LISTFILE=acc_list.txt
 - K562 trinuc (4290692): array 1-11, LISTFILE=acc_list_k562_cellids.txt
-After these finish: run_qc / run_qc_and_collect populates trinuc columns.
+After these finish: 04.qc_per_cell / 04.qc_collect populates trinuc columns.
 (Note: nome_qc HCG/GCH = covered-site counts from NOMe cov, NOT the BisSNP
 6plus2-filtered counts; different definition.)
+
+## FINAL — ALL scnome processing COMPLETE 2026-06-10 ~11:00 (no failures)
+- GM12878 rerun (both-ends trim): trim+align+dedup+methy+QC done (12 cells).
+- K562 (merge 2 runs/cell -> dedup once -> methy): done (11 cells).
+  K562 methy 4288786 + K562 NOMe QC 4289056 both 11/11 COMPLETED.
+- NOMe cov: GM 24 CpG+24 GpC; K562 22 CpG+22 GpC.
+- NOMe QC (sites + read-level trinuc proxy): GM 12 + K562 11 qc_stats/*.nome_qc.tsv.
+- BisSNP trinuc (ORIGINAL method, Java 8): 46 chrM + 46 chr21 trinuc_methy files
+  (GM 24 + K562 22 each). chr21: ACT conv ~0.3% (GM), CpG ~32% (GM)/~28% (K562),
+  GpC ~18% (GM). vs gm_sc_new (scNOMe-HiC): conv & CpG comparable, GpC much
+  higher there (~65%) = stronger accessibility signal in the scNOMe-HiC protocol.
+- NOT YET RUN (optional): 04.qc_collect.sh to rebuild scnome_qc_summary.csv with
+  the real BisSNP trinuc columns across all 23 cells.
 
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
