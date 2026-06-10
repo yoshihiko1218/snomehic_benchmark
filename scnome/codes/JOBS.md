@@ -68,6 +68,21 @@ the Bismark pipeline. Core Trim/Bismark/BAM/methyl metrics are populated.
 NEXT (optional): `sbatch codes/run_qc_and_collect.sh` to rebuild
 scnome_qc_summary.csv across ALL 34 cells (GM rerun + existing K562).
 
+## K562 per-cell pipeline (merge 2 runs/cell) — SUBMITTED 2026-06-10
+K562 cells = 11 (consecutive SRR pairs, acc_list_k562_cells.tsv). Each cell was
+sequenced as 2 runs; merge both runs' bismark BAMs then markdup ONCE (removes
+within+cross-run dups), then NOMe methylation per cell. Reuses existing per-run
+bismark BAMs (skips trim+align).
+- 03k.merge_dedup_k562.sh   : 4288785  (array 1-11)
+- 03k.methy_extract_k562.sh : 4288786  (afterok 4288785, array 1-11)
+Submit driver: `bash codes/submit_k562.sh`. Logs: logs/04.k562_merge/, logs/04.k562_methy/.
+
+## TODO QC (trinuc + detected HCG sites) — for BOTH GM and K562
+Old QC pulled HCG/GCH site counts + chrM/chr21 trinuc rates from Bis-tools files
+that the Bismark pipeline does not produce. Recompute from Bismark outputs:
+- HCG sites = covered CpG positions (NOMe.CpG.cov.gz); GCH = NOMe.GpC.cov.gz.
+- trinuc (ACT/ACG/GCT on chrM,chr21) = from merged BAM + reference via pysam.
+
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
 - **Job name:** methyext
