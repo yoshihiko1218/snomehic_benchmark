@@ -12,11 +12,14 @@
 # Build a STAR index with the SAME STAR version yap uses (2.7.10a in the `mapping`
 # env). The existing star_2.7.11b_* index is unreadable by 2.7.10a
 # (FATAL: unrecognized parameter name "genomeType"). hg38 + gencode.v36, sjdbOverhang 100.
-set -euo pipefail
 
+# NOTE: source bashrc / activate conda BEFORE `set -u`; ~/.bashrc references an
+# unbound var (BASHRCSOURCED) that would abort the job under set -u.
 source /home/jmj7858/.bashrc
 conda activate mapping
 export PATH="$CONDA_PREFIX/bin:$PATH"
+
+set -euo pipefail
 
 echo "STAR: $(which STAR)"; STAR --version
 
