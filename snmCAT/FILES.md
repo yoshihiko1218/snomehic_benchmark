@@ -10,6 +10,9 @@ mirrors the yap workflow used in `../snmCseq3/`.
 - `fastq/` — downloaded reads: `SRR*_{1,2}.fastq.gz` plus yap symlinks `SRR*-R{1,2}.fq.gz`.
 - `mapping/` — yap output tree. One `Group<k>/` per cell-group with its own `Snakefile`;
   `mapping/snakemake/snakemake_cmd.txt` lists the 64 snakemake commands (one per array task).
+  Per-cell outputs: `Group*/allc/<cell>.allc.tsv.gz` (methylation), `Group*/rna_bam/*.feature_count.tsv` (RNA).
+- `mapping/stats/` — **final QC**, built by `yap summary -o mapping`:
+  `MappingSummary.csv.gz` (100 cells × 92 cols; the benchmark QC input) + `AllcPaths.tsv` (100 ALLC paths).
 - `mapping_probe1/` — throwaway probe dir from the first `start-from-cell-fastq` test (safe to delete).
 - `JOBS.md` — submitted SLURM jobs + how to check/resubmit.
 - `SESSION_NOTE_*.md` — per-session work log.

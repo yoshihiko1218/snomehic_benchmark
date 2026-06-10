@@ -45,3 +45,17 @@ yap workflow (in the parent `benchmark/` folder).
 
 ## Decisions confirmed by user
 - Mode = **mct** (methylation + RNA). Scope = **all 100 cells**.
+
+## FINAL OUTCOME (2026-06-10, end of session) — ✅ COMPLETE
+Pipeline finished successfully: **100/100 cells mapped**, 0 errors.
+- Three bugs found & fixed during monitoring:
+  1. **STAR version mismatch** — index `star_2.7.11b` unreadable by env STAR 2.7.3a (`genomeType` FATAL).
+     Rebuilt matching index `star_2.7.10a_gencode.v36_sjdb100` (job 4312628; actual builder 2.7.3a).
+  2. **Index build crashed in 0s** — `set -euo pipefail` ran before `source ~/.bashrc` (BASHRCSOURCED
+     unbound var). Fixed by sourcing bashrc/activating conda BEFORE `set -u`.
+  3. **Stale-lock restart** — runner `--unlock` aborted on IncompleteFilesException before clearing
+     locks (only 7/64 groups ran). Fixed: `${CMD} --rerun-incomplete --unlock` then `${CMD} --rerun-incomplete`.
+- Final job: **4316481** (array 1-64) — all 100 cells, allc + RNA feature_count produced.
+- `yap summary -o mapping` → `mapping/stats/MappingSummary.csv.gz` (100×92) + `AllcPaths.tsv` (100).
+- QC medians: R1 input 2.52M, R1 map 64.8% / R2 32.6%, mCG 72.8%, mCHH 9.2%, FinalDNA 733k; RNA cols present.
+- This MappingSummary.csv.gz is the benchmark QC input (same format as other yap methods per PROJECT_CONTEXT).
