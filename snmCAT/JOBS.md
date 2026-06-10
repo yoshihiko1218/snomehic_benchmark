@@ -2,8 +2,17 @@
 
 | Date | Job name | Job ID | Submit command | Array | Logs | Status |
 |---|---|---|---|---|---|---|
-| 2026-06-10 | snmCAT_mct | 4307786 | `sbatch codes/02.run_snakemake.sh` | 1-64 | `codes/logs/02.mapping/snakemake.<task>.{out,err}` | submitted (PD) |
+| 2026-06-10 | star_index_2710a | 4310364 | `sbatch codes/04.build_star_index_2.7.10a.sh` | - | `codes/logs/04.star_index/build.{out,err}` | running (index rebuild) |
+| 2026-06-10 | snmCAT_mct | 4307786 | `sbatch codes/02.run_snakemake.sh` | 1-64 | `codes/logs/02.mapping/snakemake.<task>.{out,err}` | **CANCELLED** (STAR version mismatch) |
 | (earlier) | dl_fastq | (see codes/logs/00.download) | `sbatch codes/00.download.sh` | 1-100 | `codes/logs/00.download/dl.<task>.{txt,err}` | done (100 cells) |
+
+## Issue found & fix (2026-06-10)
+- Job 4307786 failed in `rule star`: `FATAL INPUT ERROR: unrecognized parameter name "genomeType"`.
+- Cause: index `star_2.7.11b_gencode.v36_sjdb150` built with STAR **2.7.11b**, but yap's `mapping`
+  env has STAR **2.7.10a** (cannot read the newer index). Bismark/methylation half was fine.
+- Fix: build a matching index `star_2.7.10a_gencode.v36_sjdb100` (job 4310364), repoint
+  `mapping_config.ini` + Snakefiles (`codes/03.patch_star_reference.sh` now overwrites the value),
+  then resubmit `codes/02.run_snakemake.sh`.
 
 ## Latest job: 4307786 (yap mct mapping)
 - One array task per snakemake Group (64 groups, 100 cells total).
