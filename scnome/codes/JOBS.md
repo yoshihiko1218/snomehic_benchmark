@@ -77,11 +77,16 @@ bismark BAMs (skips trim+align).
 - 03k.methy_extract_k562.sh : 4288786  (afterok 4288785, array 1-11)
 Submit driver: `bash codes/submit_k562.sh`. Logs: logs/04.k562_merge/, logs/04.k562_methy/.
 
-## TODO QC (trinuc + detected HCG sites) — for BOTH GM and K562
-Old QC pulled HCG/GCH site counts + chrM/chr21 trinuc rates from Bis-tools files
-that the Bismark pipeline does not produce. Recompute from Bismark outputs:
-- HCG sites = covered CpG positions (NOMe.CpG.cov.gz); GCH = NOMe.GpC.cov.gz.
-- trinuc (ACT/ACG/GCT on chrM,chr21) = from merged BAM + reference via pysam.
+## NOMe QC (trinuc + detected HCG/GCH sites) — Bismark-native, DONE/SUBMITTED 2026-06-10
+codes/nome_qc_sites_trinuc.py + codes/run_nome_qc.sh. Computes per cell:
+HCG/GCH detected sites (NOMe cov rows) + chrM/chr21 ACT/ACG/GCT meth rates
+(from deduped BAM + reference). Validated on GM SRR3729642: chr21 ACT=6.5%
+(conversion), ACG=38%, GCT=26%; chrM ~75% = known mito bisulfite-resistance.
+- K562 merge+dedup (4288785): 11/11 COMPLETED (~7 min). 11/11 real merged BAMs.
+- K562 methy (4288786): RUNNING (array 1-11).
+- GM NOMe QC (4289055): array 1-12, LISTFILE=acc_list.txt -> qc_stats/<SRR>.nome_qc.tsv.
+- K562 NOMe QC (4289056): array 1-11, afterok 4288786 -> qc_stats/K562_NN.nome_qc.tsv.
+Submit form: sbatch --array=1-N --export=ALL,LISTFILE=<list> codes/run_nome_qc.sh.
 
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
