@@ -40,6 +40,13 @@ STATUS 2026-06-09 ~18:21:
   chain; current run overwrites them after bismark. (02.alignment.sh has no
   fail-fast; harmless here since bismark is succeeding.)
 
+STATUS 2026-06-09 ~19:50:
+- 02.alignment (4258489): 2/12 COMPLETED (tasks 3,5 = SRR3729644/646), 10 RUNNING
+  (~1h40m). Completed cells produced REAL BAMs (256-350 MB .rmdup.bam +
+  .rmdup.RG.bam + .bai + summary.txt); stale 28-byte files overwritten. No errors.
+  Non-directional library confirmed (CT/CT, CT/GA, GA/CT, GA/GA all present).
+- 03.methy (4258490) starts only after ALL 12 alignment tasks finish (afterok).
+
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
 - **Job name:** methyext
