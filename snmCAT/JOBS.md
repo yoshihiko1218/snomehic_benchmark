@@ -2,7 +2,7 @@
 
 | Date | Job name | Job ID | Submit command | Array | Logs | Status |
 |---|---|---|---|---|---|---|
-| 2026-06-10 | snmCAT_mct (resubmit2) | 4316481 | `sbatch codes/02.run_snakemake.sh` | 1-64 | `codes/logs/02.mapping/snakemake.<task>.{out,err}` | submitted (PD) — unlock fix |
+| 2026-06-10 | snmCAT_mct (resubmit2) | 4316481 | `sbatch codes/02.run_snakemake.sh` | 1-64 | `codes/logs/02.mapping/snakemake.<task>.{out,err}` | RUNNING healthy — unlock fix works (0 lock/real errors); 32 allc + 21 RNA so far |
 | 2026-06-10 | snmCAT_mct (resubmit) | 4314070 | `sbatch codes/02.run_snakemake.sh` | 1-64 | (same) | partial: 7 groups OK (allc+RNA confirmed), rest blocked by stale-lock/unlock bug |
 | 2026-06-10 | star_index_2710a | 4312628 | `sbatch codes/04.build_star_index_2.7.10a.sh` | - | `codes/logs/04.star_index/build.{out,err}` | COMPLETED (23 min; builder STAR=2.7.3a, see note) |
 | 2026-06-10 | star_index_2710a | 4310364 | `sbatch codes/04.build_star_index_2.7.10a.sh` | - | `codes/logs/04.star_index/build.{out,err}` | **FAILED** (set -u + bashrc unbound var, 0s) |
