@@ -15,12 +15,9 @@
 # contexts, then extracts the per-trinucleotide methylation summary into
 # 04.alignment/<cell>_<mate>.rmdup.RG.trinuc_methy.{chrM,chr21}.txt -- exactly the
 # files scnome_qc_per_cell.py expects (ACT=conversion control, ACG=CpG, GCT=GpC).
-#
-# BisSNP is GATK-3.8-based and its walker discovery FAILS on Java >8; must use
-# Java 8 (module java/jdk1.8.0_191), NOT the conda env's Java 21.
-#
-#   GM   : sbatch --array=1-12 --export=ALL,LISTFILE=acc_list.txt             codes/run_bissnp_trinuc.sh
-#   K562 : sbatch --array=1-11 --export=ALL,LISTFILE=acc_list_k562_cellids.txt codes/run_bissnp_trinuc.sh
+
+#   GM   : sbatch --array=1-12 --export=ALL,LISTFILE=acc_list.txt             codes/04.qc_bissnp_trinuc.sh
+#   K562 : sbatch --array=1-11 --export=ALL,LISTFILE=acc_list_k562_cellids.txt codes/04.qc_bissnp_trinuc.sh
 
 source /home/jmj7858/.bashrc 2>/dev/null
 module load java/jdk1.8.0_191

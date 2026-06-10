@@ -5,8 +5,8 @@
 # (SRR3729654-3729660) files are NOT touched.
 #
 # Usage:
-#   bash codes/clear_gm_stale.sh         # DRY RUN: only lists what would be deleted
-#   bash codes/clear_gm_stale.sh --yes   # actually delete
+#   bash codes/util_clear_gm_stale.sh         # DRY RUN: only lists what would be deleted
+#   bash codes/util_clear_gm_stale.sh --yes   # actually delete
 set -u
 
 cd /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/scnome

@@ -9,14 +9,14 @@ Note: raw reads are gzipped `01.fastq/<p>_{1,2}.fq.gz`; 01.trim.sh now reads
 `.fq.gz` (was `.fastq`), and scnome_qc_per_cell.py accepts either trim-report name.
 
 Submit the whole chain with ONE command:
-- `bash codes/submit_gm_rerun.sh`
+- `bash codes/submit_gm.sh`
   -> 01.trim -> 02.alignment -> 03.methy_extract -> run_qc (each afterok the prev).
 
 SUBMITTED 2026-06-09 (array 1-12 = GM12878):
 - 01.trim.sh          : 4257035
-- 02.alignment.sh     : 4257036  (afterok 4257035)
+- 02.align_dedup.sh     : 4257036  (afterok 4257035)
 - 03.methy_extract.sh : 4257037  (afterok 4257036)
-- run_qc.sh           : 4257038  (afterok 4257037)
+- 04.qc_per_cell.sh           : 4257038  (afterok 4257037)
 => FAILED. Root cause: 01.trim.sh `cd` pointed at nonexistent b1198 path, so
    acc_list.txt was not found, prefix empty, trim_galore ran on missing files
    yet exited 0; 02.alignment then ran with no trimmed input and FAILED; 03/qc
@@ -25,9 +25,9 @@ SUBMITTED 2026-06-09 (array 1-12 = GM12878):
 
 RESUBMITTED 2026-06-09 (array 1-12 = GM12878):
 - 01.trim.sh          : 4258488
-- 02.alignment.sh     : 4258489  (afterok 4258488)
+- 02.align_dedup.sh     : 4258489  (afterok 4258488)
 - 03.methy_extract.sh : 4258490  (afterok 4258489)
-- run_qc.sh           : 4258491  (afterok 4258490)
+- 04.qc_per_cell.sh           : 4258491  (afterok 4258490)
 Logs: logs/01.qc_trim/, logs/02.bisqc/, logs/03.methy_extract/, logs/03.qc/
 Monitor: squeue -u jmj7858
 
@@ -37,7 +37,7 @@ STATUS 2026-06-09 ~18:21:
 - 02.alignment (4258489): all 12 RUNNING, bismark progressing, no errors.
 - 03.methy (4258490) / run_qc (4258491): PENDING (dependency).
 - Note: 28-byte *.rmdup.bam at 17:39 are stale leftovers from the failed first
-  chain; current run overwrites them after bismark. (02.alignment.sh has no
+  chain; current run overwrites them after bismark. (02.align_dedup.sh has no
   fail-fast; harmless here since bismark is succeeding.)
 
 STATUS 2026-06-09 ~19:50:
@@ -65,7 +65,7 @@ No errors (only benign 'could not extract chromosomal sequence ..._random').
 NOTE: QC columns sourced from the OLD Bis-tools route (HCG/GCH_site_count,
 chrM/chr21 trinuc rates) are blank for these cells - that route is not part of
 the Bismark pipeline. Core Trim/Bismark/BAM/methyl metrics are populated.
-NEXT (optional): `sbatch codes/run_qc_and_collect.sh` to rebuild
+NEXT (optional): `sbatch codes/04.qc_collect.sh` to rebuild
 scnome_qc_summary.csv across ALL 34 cells (GM rerun + existing K562).
 
 ## K562 per-cell pipeline (merge 2 runs/cell) — SUBMITTED 2026-06-10
@@ -73,12 +73,12 @@ K562 cells = 11 (consecutive SRR pairs, acc_list_k562_cells.tsv). Each cell was
 sequenced as 2 runs; merge both runs' bismark BAMs then markdup ONCE (removes
 within+cross-run dups), then NOMe methylation per cell. Reuses existing per-run
 bismark BAMs (skips trim+align).
-- 03k.merge_dedup_k562.sh   : 4288785  (array 1-11)
+- 02k.merge_dedup_k562.sh   : 4288785  (array 1-11)
 - 03k.methy_extract_k562.sh : 4288786  (afterok 4288785, array 1-11)
 Submit driver: `bash codes/submit_k562.sh`. Logs: logs/04.k562_merge/, logs/04.k562_methy/.
 
 ## NOMe QC (trinuc + detected HCG/GCH sites) — Bismark-native, DONE/SUBMITTED 2026-06-10
-codes/nome_qc_sites_trinuc.py + codes/run_nome_qc.sh. Computes per cell:
+codes/nome_qc_sites_trinuc.py + codes/04.qc_nome_sites.sh. Computes per cell:
 HCG/GCH detected sites (NOMe cov rows) + chrM/chr21 ACT/ACG/GCT meth rates
 (from deduped BAM + reference). Validated on GM SRR3729642: chr21 ACT=6.5%
 (conversion), ACG=38%, GCT=26%; chrM ~75% = known mito bisulfite-resistance.
@@ -86,13 +86,13 @@ HCG/GCH detected sites (NOMe cov rows) + chrM/chr21 ACT/ACG/GCT meth rates
 - K562 methy (4288786): RUNNING (array 1-11).
 - GM NOMe QC (4289055): array 1-12, LISTFILE=acc_list.txt -> qc_stats/<SRR>.nome_qc.tsv.
 - K562 NOMe QC (4289056): array 1-11, afterok 4288786 -> qc_stats/K562_NN.nome_qc.tsv.
-Submit form: sbatch --array=1-N --export=ALL,LISTFILE=<list> codes/run_nome_qc.sh.
+Submit form: sbatch --array=1-N --export=ALL,LISTFILE=<list> codes/04.qc_nome_sites.sh.
 
 ## BisSNP trinuc QC (ORIGINAL method) — SUBMITTED 2026-06-10
 Decision: use the original BisSNP for trinuc (my read-level proxy differed: it
 lacked the -minPatConv 0.8 read conversion filter, used context CLASSES not
 literal trinucleotides, and no dbSNP masking -> read several-fold higher).
-codes/run_bissnp_trinuc.sh: BisulfiteGenotyper on chrM+chr21 per cell/mate ->
+codes/04.qc_bissnp_trinuc.sh: BisulfiteGenotyper on chrM+chr21 per cell/mate ->
 04.alignment/<cell>_<m>.rmdup.RG.trinuc_methy.{chrM,chr21}.txt (consumed by
 scnome_qc_per_cell.py). CRITICAL: needs Java 8 (module java/jdk1.8.0_191);
 GATK-3.8 walker discovery fails on the conda env's Java 21. Validated on

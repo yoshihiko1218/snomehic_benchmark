@@ -5,8 +5,8 @@
 # hardcoded here because they are no longer present in acc_list.txt.
 #
 # Usage:
-#   bash codes/clear_control_files.sh         # DRY RUN: only lists what would be deleted
-#   bash codes/clear_control_files.sh --yes   # actually delete
+#   bash codes/util_clear_control_files.sh         # DRY RUN: only lists what would be deleted
+#   bash codes/util_clear_control_files.sh --yes   # actually delete
 set -u
 
 cd /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/scnome

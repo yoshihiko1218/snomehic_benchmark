@@ -11,7 +11,7 @@
 #SBATCH --error=logs/04.k562_methy/methyext.%a.err
 
 # K562 NOMe methylation extraction, run on the MERGED per-cell BAMs produced by
-# codes/03k.merge_dedup_k562.sh (prefix = K562_NN, mates 1 and 2). Identical to
+# codes/02k.merge_dedup_k562.sh (prefix = K562_NN, mates 1 and 2). Identical to
 # codes/03.methy_extract.sh otherwise:
 #   Step 1  bismark_methylation_extractor -s --ignore 6 --bedGraph --CX -> *.bismark.cov.gz
 #   Step 2  coverage2cytosine --nome-seq -> NOMe CpG (ACG/TCG) and GpC (GCA/GCC/GCT)

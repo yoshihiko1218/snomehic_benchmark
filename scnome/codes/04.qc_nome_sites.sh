@@ -16,8 +16,8 @@
 #
 # LISTFILE selects which cells to process (one prefix per line); prefix must match
 # the <prefix>_<mate>.rmdup.RG.bam and 05.methy/<prefix>_<mate>.NOMe.* naming.
-#   GM   : sbatch --array=1-12 --export=ALL,LISTFILE=acc_list.txt            codes/run_nome_qc.sh
-#   K562 : sbatch --array=1-11 --export=ALL,LISTFILE=acc_list_k562_cellids.txt codes/run_nome_qc.sh
+#   GM   : sbatch --array=1-12 --export=ALL,LISTFILE=acc_list.txt            codes/04.qc_nome_sites.sh
+#   K562 : sbatch --array=1-11 --export=ALL,LISTFILE=acc_list_k562_cellids.txt codes/04.qc_nome_sites.sh
 
 source /home/jmj7858/.bashrc
 conda activate scnomehic
