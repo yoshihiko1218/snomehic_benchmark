@@ -88,6 +88,21 @@ HCG/GCH detected sites (NOMe cov rows) + chrM/chr21 ACT/ACG/GCT meth rates
 - K562 NOMe QC (4289056): array 1-11, afterok 4288786 -> qc_stats/K562_NN.nome_qc.tsv.
 Submit form: sbatch --array=1-N --export=ALL,LISTFILE=<list> codes/run_nome_qc.sh.
 
+## BisSNP trinuc QC (ORIGINAL method) — SUBMITTED 2026-06-10
+Decision: use the original BisSNP for trinuc (my read-level proxy differed: it
+lacked the -minPatConv 0.8 read conversion filter, used context CLASSES not
+literal trinucleotides, and no dbSNP masking -> read several-fold higher).
+codes/run_bissnp_trinuc.sh: BisulfiteGenotyper on chrM+chr21 per cell/mate ->
+04.alignment/<cell>_<m>.rmdup.RG.trinuc_methy.{chrM,chr21}.txt (consumed by
+scnome_qc_per_cell.py). CRITICAL: needs Java 8 (module java/jdk1.8.0_191);
+GATK-3.8 walker discovery fails on the conda env's Java 21. Validated on
+SRR3729642 chrM (exit 0, 16 N-C-N contexts).
+- GM trinuc   (4290691): array 1-12, LISTFILE=acc_list.txt
+- K562 trinuc (4290692): array 1-11, LISTFILE=acc_list_k562_cellids.txt
+After these finish: run_qc / run_qc_and_collect populates trinuc columns.
+(Note: nome_qc HCG/GCH = covered-site counts from NOMe cov, NOT the BisSNP
+6plus2-filtered counts; different definition.)
+
 
 ## 03.methy_extract — Bismark NOMe methylation extraction (Pott 2017 protocol)
 - **Job name:** methyext
