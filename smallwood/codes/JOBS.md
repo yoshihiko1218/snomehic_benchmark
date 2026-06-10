@@ -1,9 +1,11 @@
 # JOBS — smallwood
 
-## 05.hcg_nome — HCG track for cross-method benchmark vs scNOMe (NOT submitted yet)
+## 05.hcg_nome — HCG track for cross-method benchmark vs scNOMe
 - **Job name:** smwhcg
+- **Job ID:** 4299883 (array 1-32, submitted 2026-06-10 ~12:18). Each task ~27 min.
 - **Script:** `codes/05.hcg_nome.sh` (array 1-32, reads `acc_list_esc.txt` = 32 ESC cells)
 - **Submit:** `sbatch codes/05.hcg_nome.sh`
+- **Status check:** `squeue -u jmj7858 -n smwhcg` ; done = `grep -l "DONE prefix" logs/05.hcg_nome/*.txt | wc -l`
 - **Logs:** `smallwood/logs/05.hcg_nome/smwhcg.<arrayid>.txt` (+ `.err`)
 - **What it does:** `coverage2cytosine --nome-seq --genome_folder mm10_bismark`
   on each `06.methy/<cell>.dedup.bismark.cov.gz` (all-CpG) ->
