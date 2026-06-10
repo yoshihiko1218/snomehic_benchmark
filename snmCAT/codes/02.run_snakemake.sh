@@ -46,7 +46,9 @@ export TMPDIR="${BASE}/mapping/.slurm_tmp/${SLURM_JOB_ID}_${SLURM_ARRAY_TASK_ID}
 mkdir -p "${TMPDIR}"
 
 # Release any stale lock left by a previously cancelled run, then map.
-# --rerun-incomplete redoes outputs that were killed mid-write while reusing valid ones.
-eval "${CMD} --unlock" || true
+# --rerun-incomplete must be on the unlock call too: otherwise snakemake aborts
+# DAG building with IncompleteFilesException BEFORE it reaches the unlock action,
+# leaving the stale lock in place and failing the real run with "cannot be locked".
+eval "${CMD} --rerun-incomplete --unlock" || true
 eval "${CMD} --rerun-incomplete"
 echo "[$(date)] DONE"
