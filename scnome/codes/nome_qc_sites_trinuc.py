@@ -134,10 +134,10 @@ def main():
     a = ap.parse_args()
 
     chroms = [c for c in a.chroms.split(",") if c]
-    mates = [m for m in a.mates.split(",") if m]
+    mates = [m for m in a.mates.split(",") if m] or [""]  # [""] = single no-mate cell (e.g. Smallwood scBS-seq)
 
-    cpg = [os.path.join(a.methy_dir, f"{a.cell}_{m}.NOMe.CpG.cov.gz") for m in mates]
-    gpc = [os.path.join(a.methy_dir, f"{a.cell}_{m}.NOMe.GpC.cov.gz") for m in mates]
+    cpg = [os.path.join(a.methy_dir, f"{a.cell}{'_'+m if m else ''}.NOMe.CpG.cov.gz") for m in mates]
+    gpc = [os.path.join(a.methy_dir, f"{a.cell}{'_'+m if m else ''}.NOMe.GpC.cov.gz") for m in mates]
     stats = {
         "CellID": a.cell,
         "HCG_site_count": count_cov_sites(cpg),
@@ -147,7 +147,7 @@ def main():
     # trinuc: pool mates per chrom (sum counts)
     pooled = {ch: {"ACT": [0, 0], "ACG": [0, 0], "GCT": [0, 0]} for ch in chroms}
     for m in mates:
-        bam = os.path.join(a.align_dir, f"{a.cell}_{m}{a.bam_suffix}")
+        bam = os.path.join(a.align_dir, f"{a.cell}{'_'+m if m else ''}{a.bam_suffix}")
         if not os.path.exists(bam):
             print(f"  [WARN] missing BAM {bam}")
             continue
