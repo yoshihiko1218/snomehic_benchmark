@@ -9,6 +9,16 @@
 | 2026-06-10 | snmCAT_mct | 4307786 | `sbatch codes/02.run_snakemake.sh` | 1-64 | `codes/logs/02.mapping/snakemake.<task>.{out,err}` | **CANCELLED** (STAR version mismatch) |
 | (earlier) | dl_fastq | (see codes/logs/00.download) | `sbatch codes/00.download.sh` | 1-100 | `codes/logs/00.download/dl.<task>.{txt,err}` | done (100 cells) |
 
+## NOMe investigation (2026-06-10) — VERDICT: snmCT-seq (no NOMe)
+| Job | What | Status |
+|---|---|---|
+| 4329802 | full 100-cell `--nome` re-run (`codes/08`, → `mapping_nome/`) | ✅ COMPLETE, 0 errors |
+| 4340573 | NOMe HCG/GCH/HCH rate collector (`codes/09`) | running → `mapping_nome/stats/hcg_gch_nome.tsv` |
+- Medians: non-nome HCG 60.2% / GCH 1.57% / HCH 1.53% ; --nome HCG 65.4% / GCH 1.53% / HCH 1.59%.
+- GCH ≈ HCH background in both; `--nome` changed nothing → **no GpC/NOMe signal → snmCT-seq, not snmCAT-seq.**
+- HCG = real CpG methylation. Tables: `mapping/stats/hcg_gch_site_counts.tsv` (non-nome),
+  `mapping_nome/stats/hcg_gch_nome.tsv` (nome). Canonical output: `mapping_nome/` (num_upstr_bases=1 ALLC).
+
 ## ✅ PIPELINE COMPLETE (2026-06-10)
 - All 100 cells mapped (yap mct: bismark methylation + STAR/featureCounts RNA), 0 errors.
 - `yap summary -o mapping` built **`mapping/stats/MappingSummary.csv.gz`** (100 cells × 92 cols)

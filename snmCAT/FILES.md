@@ -13,6 +13,12 @@ mirrors the yap workflow used in `../snmCseq3/`.
   Per-cell outputs: `Group*/allc/<cell>.allc.tsv.gz` (methylation), `Group*/rna_bam/*.feature_count.tsv` (RNA).
 - `mapping/stats/` — **final QC**, built by `yap summary -o mapping`:
   `MappingSummary.csv.gz` (100 cells × 92 cols; the benchmark QC input) + `AllcPaths.tsv` (100 ALLC paths).
+  Also `hcg_gch_site_counts.tsv` — per-cell HCG/GCH/HCH site counts + mC rates (non-nome; `codes/05`+`06`).
+- `mapping_nome/` — **full --nome re-run** (paper-correct NOMe: num_upstr_bases=1 + select-dna-reads --nome;
+  `codes/08`, config `codes/mapping_config_nome.ini`). `mapping_nome/stats/hcg_gch_nome.tsv` = per-cell
+  HCG/GCH/HCH counts + mC rates (`codes/09`). **Verdict: GCH ≈ background → snmCT-seq, no NOMe accessibility.**
+  This dir is the cleaner canonical output (num_upstr_bases=1 ALLC) even though the data isn't NOMe.
+- `nome_test/` — throwaway 3-cell NOMe probe (superseded by mapping_nome/; safe to delete).
 - `mapping_probe1/` — throwaway probe dir from the first `start-from-cell-fastq` test (safe to delete).
 - `JOBS.md` — submitted SLURM jobs + how to check/resubmit.
 - `SESSION_NOTE_*.md` — per-session work log.

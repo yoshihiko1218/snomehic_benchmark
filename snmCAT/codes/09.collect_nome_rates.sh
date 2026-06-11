@@ -15,9 +15,7 @@
 #   GCH = c[1]=='G'     & c[3]in{A,C,T} (G C H ...) -> NOMe accessibility (if any)
 #   HCH = c[1]in{A,C,T} & c[3]in{A,C,T}             -> background
 #   (1-indexed awk substr: pos1=upstream, pos2='C', pos3=downstr1)
-set -euo pipefail
-source /home/jmj7858/.bashrc
-set +u 2>/dev/null || true
+set -o pipefail   # no -e/-u/bashrc: keep going past any single unreadable file (logged)
 BASE="/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT"
 OUT="${BASE}/mapping_nome/stats/hcg_gch_nome.tsv"
 mkdir -p "${BASE}/mapping_nome/stats" "${BASE}/codes/logs/09.nome_rates"
@@ -26,6 +24,10 @@ printf "cell_id\tHCG_site_count\tGCH_site_count\tHCH_site_count\tHCG_mc_rate\tGC
 
 for allc in "${BASE}"/mapping_nome/Group*/allc/*.allc.tsv.gz; do
     cell=$(basename "${allc}" .allc.tsv.gz)
+    if ! gzip -t "${allc}" 2>/dev/null; then
+        echo "WARN: unreadable, skipping ${allc}" >&2
+        continue
+    fi
     zcat "${allc}" | awk -F'\t' -v cell="${cell}" '
         { c=$4; mc=$5; cov=$6; u=substr(c,1,1); d=substr(c,3,1);
           if ((u=="A"||u=="C"||u=="T") && d=="G")      { hn++; hmc+=mc; hcov+=cov }

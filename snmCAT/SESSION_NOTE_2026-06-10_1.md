@@ -59,3 +59,22 @@ Pipeline finished successfully: **100/100 cells mapped**, 0 errors.
 - `yap summary -o mapping` → `mapping/stats/MappingSummary.csv.gz` (100×92) + `AllcPaths.tsv` (100).
 - QC medians: R1 input 2.52M, R1 map 64.8% / R2 32.6%, mCG 72.8%, mCHH 9.2%, FinalDNA 733k; RNA cols present.
 - This MappingSummary.csv.gz is the benchmark QC input (same format as other yap methods per PROJECT_CONTEXT).
+
+## NOMe / HCG-GCH investigation (2026-06-10) — VERDICT: snmCT-seq, NOT NOMe
+User asked to extract per-cell HCG & GCH loci, and questioned whether this is snmCAT-seq/snmC2T-seq (NOMe).
+- HCG = H-CG (CpG, not preceded by G); GCH = G-CH (GpC accessibility, only real if NOMe/GpC-MTase used). GCG excluded.
+- Original ALLC used num_upstr_bases=0 → can't classify HCG/GCH. Recomputed with num_upstr_bases=1
+  via `allcools bam-to-allc` from retained dna_reads.bam (codes/05, 06) → mapping/stats/hcg_gch_site_counts.tsv.
+- **Code vs paper check** (cemba_data/mapping/mct/mct_bismark_bam_filter.py): yap WITHOUT --nome == paper
+  step 4a exactly (XM tag, mCH<=0.5, cov>=3). `--nome` additionally EXCLUDES GpC from the read-level mCH
+  (so accessibility reads aren't misbinned as RNA); paper step 5a needs num_upstr_bases=1. yap leaves
+  bismark_reference/star_reference/nome_flag_str BLANK in generated files (injection bugs) — all patched.
+- **Full --nome re-run** of all 100 cells (job 4329802 → mapping_nome/, config codes/mapping_config_nome.ini,
+  runner codes/08, collector codes/09 → mapping_nome/stats/hcg_gch_nome.tsv).
+- **RESULT (medians): GCH ≈ HCH background in BOTH pipelines; --nome changed nothing.**
+  non-nome: HCG 60.2% / GCH 1.57% / HCH 1.53% ; --nome: HCG 65.4% / GCH 1.53% / HCH 1.59%.
+- **VERDICT: this dataset is snmCT-seq (mC + transcriptome), NO NOMe/GpC accessibility.** If NOMe had been
+  applied GCH would be 15-40%. The 'mCT' SRA labels are correct; folder name 'snmCAT' is a misnomer.
+  HCG (~60-65%) is the real CpG-methylation readout. GCH carries no accessibility signal (only coverage breadth).
+- The yap parameter was NOT the cause — proper --nome processing gave identical GCH because there is no GpC methylation.
+- Canonical output going forward: mapping_nome/ (cleaner num_upstr_bases=1 ALLC, NOMe-ready context labels).
