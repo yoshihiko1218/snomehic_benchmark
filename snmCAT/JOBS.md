@@ -76,3 +76,11 @@ Inspect `codes/logs/02.mapping/snakemake.<task>.err`, fix, then resubmit just th
   text was the generic series extraction blob. 171009=scmCT-seq, 180615=snmCT-seq → both non-NOMe (confirmed by data).
 - The ONLY NOMe (snmC2T-seq) data in GSE140493 is the **brain UMB5577/UMB5580** samples (190305/190321 mCTseq,
   GSM4167187 protocol field="snmC2T-seq", ~4372 cells). These are human cortex, NOT H1. Not yet verified with data.
+
+## BRAIN snmC2T-seq (REAL NOMe) — 190321_mCTseq UMB5580
+| Step | Job/script | Status |
+|---|---|---|
+| download 100 cells → fastq_brain/ | 4369950 (codes/15) | ✅ done (200 files, 0 errors) |
+| map yap mct --nome → mapping_brain/ | 4372418 (codes/18, array 1-64) | running |
+| summary + GCH | yap summary -o mapping_brain; codes/19 | after map |
+Decisive test: median GCH_mc_rate — expect ~15-40% if real NOMe (vs 1.5% / 1.3% for the H1 batches).
