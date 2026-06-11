@@ -1,5 +1,18 @@
 # snmCAT — Submitted Jobs
 
+## ACTIVE: re-run on CORRECT NOMe batch 180615_mCT_hs_h1-hek293 (snmCAT-seq)
+Old 171009/171101 (scmCT-seq, non-NOMe) data DELETED by user. Now processing the GpC-treated batch.
+| Step | Job/script | Status |
+|---|---|---|
+| download 100 cells → fastq_180615/ | 4342733 (`codes/10.download_180615.sh`) | running/queued |
+| rename symlinks | `codes/11.rename_symlink_180615.sh` | after download |
+| yap start-from-cell-fastq (--nome config) → mapping_180615/ | `codes/mapping_config_nome.ini` | after rename |
+| patch Snakefiles (refs + nome_flag) | `codes/13.patch_nome_180615.sh` | after start |
+| map (yap mct --nome) | `codes/12.run_180615_nome.sh` (`sbatch --array=1-N`) | after patch |
+| summary + HCG/GCH | `yap summary -o mapping_180615`; adapt `codes/09` | after map |
+Expected if NOMe is real: GCH_mc_rate ~15-40% >> HCH (vs ~1.5% in the old non-NOMe batch).
+
+
 | Date | Job name | Job ID | Submit command | Array | Logs | Status |
 |---|---|---|---|---|---|---|
 | 2026-06-10 | snmCAT_mct (resubmit2) | 4316481 | `sbatch codes/02.run_snakemake.sh` | 1-64 | `codes/logs/02.mapping/snakemake.<task>.{out,err}` | ✅ **COMPLETE** — 100/100 cells, 0 errors |
