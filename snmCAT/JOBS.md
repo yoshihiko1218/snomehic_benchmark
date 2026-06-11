@@ -84,3 +84,8 @@ Inspect `codes/logs/02.mapping/snakemake.<task>.err`, fix, then resubmit just th
 | map yap mct --nome → mapping_brain/ | 4372418 (codes/18, array 1-64) | running |
 | summary + GCH | yap summary -o mapping_brain; codes/19 | after map |
 Decisive test: median GCH_mc_rate — expect ~15-40% if real NOMe (vs 1.5% / 1.3% for the H1 batches).
+
+## ✅ NOMe CONFIRMED on brain snmC2T-seq (2026-06-11)
+Early preview (map 4372418, mapping_brain/): GCH ELEVATED — SRR10471412 HCG=85.1%/GCH=19.1%/HCH=3.8%;
+SRR10470776 HCG=87.1%/GCH=15.8%/HCH=5.2%. GCH ~16-19% >> HCH ~4-5% = real NOMe accessibility.
+vs H1 171009 (GCH 1.5%) and 180615 (GCH 1.3%) = non-NOMe. The --nome pipeline works; brain UMB5580 IS the NOMe data.
