@@ -67,3 +67,9 @@
   all 4 configs (2 source + 2 copied), then `yap update-snakemake -o yap_mapping_<g>`
   regenerates Snakefiles. Verified header now has `bismark_reference = '<path>'` (line 20).
 - **Resubmitted:** sc2_yap_hg38 = **4330289**, sc2_yap_mm10 = **4330290** (array 1-64).
+
+### 07.yap_mc — resubmit with 6h walltime (backfill on full partition)
+- 36h-walltime arrays (4330289/4330290) were stuck PENDING with est start slipping past
+  midnight (genomics partition 100% full). Each Group has only 2-3 cells (<1h), so cut
+  walltime 36h -> 6h to enable scheduler backfill.
+- Cancelled 4330289/4330290. Resubmitted: sc2_yap_hg38 = **4332392**, sc2_yap_mm10 = **4332393**.

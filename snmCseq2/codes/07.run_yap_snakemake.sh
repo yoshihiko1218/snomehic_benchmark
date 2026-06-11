@@ -1,7 +1,9 @@
 #!/bin/bash
 #SBATCH -A b1042
 #SBATCH -p genomics
-#SBATCH -t 36:00:00
+#SBATCH -t 06:00:00
+# 6h walltime (not 36h): each Group has only 2-3 cells and finishes in <1h. A short
+# walltime lets the scheduler backfill these into gaps -> starts much sooner on a full partition.
 #SBATCH -N 1
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=10

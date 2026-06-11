@@ -31,3 +31,9 @@ Re-process snmCseq2 (snmC-seq2, mouse mm10, methylation-only, 249 cells) with `y
 - SUBMITTED: sc2_yap_hg38 = **4327550**, sc2_yap_mm10 = **4327551** (both array 1-64).
 - Recorded in codes/JOBS.md. Now monitoring (frequent at first, backing off when stable).
 
+
+## 18:54 update — queued, waiting on cluster
+- FIX applied & verified: bismark_reference NameError (see JOBS.md FIX 1). Snakefile header
+  now defines `bismark_reference`. Resubmitted hg38=4330289, mm10=4330290.
+- Genomics partition 100% full (149A/0I/2O). Est start ~22:27 (hg38) / 22:34 (mm10).
+- Nothing to debug; pure queue wait. Monitoring cadence widened to ~1h, converging near 22:27.
