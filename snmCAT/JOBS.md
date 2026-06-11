@@ -89,3 +89,9 @@ Decisive test: median GCH_mc_rate — expect ~15-40% if real NOMe (vs 1.5% / 1.3
 Early preview (map 4372418, mapping_brain/): GCH ELEVATED — SRR10471412 HCG=85.1%/GCH=19.1%/HCH=3.8%;
 SRR10470776 HCG=87.1%/GCH=15.8%/HCH=5.2%. GCH ~16-19% >> HCH ~4-5% = real NOMe accessibility.
 vs H1 171009 (GCH 1.5%) and 180615 (GCH 1.3%) = non-NOMe. The --nome pipeline works; brain UMB5580 IS the NOMe data.
+
+## ✅ FINAL: brain snmC2T-seq NOMe complete (100 cells, job 4372418 + collector 4396577)
+Medians (mapping_brain/stats/hcg_gch_nome.tsv): **HCG 81.2% / GCH 15.1% / HCH 4.6%** ; GCH/HCH = 3.3x ;
+92/100 cells GCH>2x HCH. MappingSummary.csv.gz + AllcPaths.tsv built (yap summary -o mapping_brain).
+=> Real NOMe accessibility confirmed. vs non-NOMe H1: 171009 GCH 1.5%, 180615 GCH 1.3%.
+mapping_brain/ is the canonical snmCAT/NOMe dataset. See RUNBOOK_nome.md.

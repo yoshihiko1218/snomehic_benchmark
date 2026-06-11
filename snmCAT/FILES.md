@@ -43,3 +43,10 @@ mirrors the yap workflow used in `../snmCseq3/`.
 5. `bash  codes/03.patch_star_reference.sh` # fix yap 1.6.9 missing reference vars
 6. `sbatch codes/02.run_snakemake.sh`       # map all cells (array 1-64)
 7. `yap summary` in `mapping/`              # build MappingSummary.csv.gz
+
+## NOMe (snmCAT / snmC2T-seq) — the REAL NOMe data
+- `fastq_brain/` — 100 brain snmC2T-seq cells (UMB5580, 190321_mCTseq; codes/15, list codes/download_list_brain.txt).
+- `mapping_brain/` — yap mct --nome outputs (codes 16-18). `stats/MappingSummary.csv.gz`, `stats/hcg_gch_nome.tsv`
+  (HCG 81% / GCH 15% / HCH 4.6% medians → real accessibility). CANONICAL snmCAT/NOMe dataset.
+- `RUNBOOK_nome.md` — end-to-end recipe.
+- NOTE: `fastq_180615/`,`mapping_180615/` = non-NOMe H1/HEK snmCT-seq (kept as methylation dataset; GCH≈bg).

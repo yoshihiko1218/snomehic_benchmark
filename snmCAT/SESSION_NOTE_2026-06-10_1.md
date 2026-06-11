@@ -78,3 +78,10 @@ User asked to extract per-cell HCG & GCH loci, and questioned whether this is sn
   HCG (~60-65%) is the real CpG-methylation readout. GCH carries no accessibility signal (only coverage breadth).
 - The yap parameter was NOT the cause — proper --nome processing gave identical GCH because there is no GpC methylation.
 - Canonical output going forward: mapping_nome/ (cleaner num_upstr_bases=1 ALLC, NOMe-ready context labels).
+
+## FINAL (2026-06-11): found + verified the REAL NOMe data = brain snmC2T-seq
+- H1/HEK "mCT" batches (171009 scmCT, 180615 snmCT) both NON-NOMe (GCH ~1.3-1.5%) — confirmed by GEO protocol field + data.
+- The NOMe (snmC2T-seq) data in GSE140493 is the BRAIN cortex samples (UMB5577/UMB5580, 190305/190321 mCTseq).
+- Downloaded 100 cells (UMB5580, 190321), mapped with full yap mct --nome (mapping_brain/), 0 errors.
+- **100-cell medians: HCG 81.2% (CpG meth) / GCH 15.1% (accessibility) / HCH 4.6% (bg); GCH/HCH 3.3x; 92/100 cells GCH>2x HCH.**
+- => Real NOMe chromatin accessibility CONFIRMED. Pipeline validated end-to-end. Recipe: RUNBOOK_nome.md (codes 15-19).
