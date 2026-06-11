@@ -73,3 +73,10 @@
   midnight (genomics partition 100% full). Each Group has only 2-3 cells (<1h), so cut
   walltime 36h -> 6h to enable scheduler backfill.
 - Cancelled 4330289/4330290. Resubmitted: sc2_yap_hg38 = **4332392**, sc2_yap_mm10 = **4332393**.
+
+### 07.yap_mc — mm10 run COMPLETE + summarized
+- All 64 mm10 groups finished (96/96 per-cell allc). Ran `yap summary -o yap_mapping_mm10`.
+- Output: `yap_mapping_mm10/stats/MappingSummary.csv.gz` (96 cells x 61 QC metrics) + AllcPaths.tsv.
+- QC sanity (mm10): R1 mapping rate median 66.6% (56-72%), R2 62.3%; ~1.5M unique reads/cell;
+  mCG/mCH/mCCC fractions, GenomeCov, LambdaCYFrac all present and sane.
+- hg38 run (4332392) still finishing (9 groups running as of 21:24). Run `yap summary -o yap_mapping_hg38` when done.

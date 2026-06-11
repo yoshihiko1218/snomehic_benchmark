@@ -37,3 +37,11 @@ Re-process snmCseq2 (snmC-seq2, mouse mm10, methylation-only, 249 cells) with `y
   now defines `bismark_reference`. Resubmitted hg38=4330289, mm10=4330290.
 - Genomics partition 100% full (149A/0I/2O). Est start ~22:27 (hg38) / 22:34 (mm10).
 - Nothing to debug; pure queue wait. Monitoring cadence widened to ~1h, converging near 22:27.
+
+## 19:20 update — RUNNING & healthy after walltime cut
+- Cut walltime 36h->6h enabled backfill; 78 tasks started immediately (jobs 4332392/4332393).
+- bismark_reference fix CONFIRMED holding: 0 fresh NameError; bismark BAMs being written
+  (hg38 192, mm10 36 and rising). The 50 stale NameError logs are from the 18:14 first run
+  (reused %x.%a filenames not yet overwritten for not-yet-restarted array indices).
+- Normal bismark warnings only ("Chromosomal sequence could not be extracted" chrM/_random).
+- Next: allc files -> per-group MappingSummary.csv.gz -> `yap summary` per run dir.
