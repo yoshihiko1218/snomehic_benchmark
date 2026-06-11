@@ -4,7 +4,7 @@
 Old 171009/171101 (scmCT-seq, non-NOMe) data DELETED by user. Now processing the GpC-treated batch.
 | Step | Job/script | Status |
 |---|---|---|
-| download 100 cells → fastq_180615/ | 4342733 (`codes/10.download_180615.sh`) | running/queued |
+| download 100 cells → fastq_180615/ | 4342733 | ✅ done (200 files, 0 errors) |
 | rename symlinks | `codes/11.rename_symlink_180615.sh` | after download |
 | yap start-from-cell-fastq (--nome config) → mapping_180615/ | `codes/mapping_config_nome.ini` | after rename |
 | patch Snakefiles (refs + nome_flag) | `codes/13.patch_nome_180615.sh` | after start |

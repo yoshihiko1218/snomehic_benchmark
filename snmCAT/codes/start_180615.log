@@ -1,0 +1,36 @@
+Making Snakefile based on mapping config INI file. The parameters are:
+overlap = 6
+r1_left_cut = 10
+r1_right_cut = 10
+r2_left_cut = 10
+r2_right_cut = 10
+quality_threshold = 20
+length_threshold = 30
+total_read_pairs_min = 1
+total_read_pairs_max = 6000000
+mapq_threshold = 10
+num_upstr_bases = 1
+num_downstr_bases = 2
+compress_level = 5
+dna_cov_min_threshold = 3
+rna_cov_min_threshold = 3
+mc_rate_max_threshold = 0.5
+mc_rate_min_threshold = 0.9
+unmapped_fastq = False
+unmapped_param_str = ''
+mode = 'mct'
+barcode_version = 'V2'
+r1_adapter = 'AGATCGGAAGAGCACACGTCTGAAC'
+r2_adapter = 'AGATCGGAAGAGCGTCGTGTAGGGA'
+hisat3n_dna_reference = 'CHANGE_THIS_TO_YOUR_HISAT3N_DNA_REFERENCE'
+hisat3n_rna_reference = 'CHANGE_THIS_TO_YOUR_HISAT3N_RNA_REFERENCE'
+hisat3n_repeat_index_type = 'no-repeat'
+reference_fasta = '/gpfs/projects/b1198/epifluidlab/yoshii/reference/hg38_bismark/GCA_000001405.15_GRCh38_no_alt_analysis_set.fa'
+gtf_path = '/gpfs/projects/b1198/epifluidlab/yoshii/reference/hg38/gencode.v36.annotation.gtf'
+feature_type = 'gene'
+id_type = 'gene_id'
+nome_flag_str = ''
+
+All snakemake commands need to be executed were summarized in /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/mapping_180615/snakemake/snakemake_cmd.txt
+You need to execute them based on the computational environment you have (e.g., use a job scheduler or run locally).
+Once all commands are executed successfully, use 'yap summary' to generate final mapping summary.
