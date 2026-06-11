@@ -80,3 +80,12 @@
 - QC sanity (mm10): R1 mapping rate median 66.6% (56-72%), R2 62.3%; ~1.5M unique reads/cell;
   mCG/mCH/mCCC fractions, GenomeCov, LambdaCYFrac all present and sane.
 - hg38 run (4332392) still finishing (9 groups running as of 21:24). Run `yap summary -o yap_mapping_hg38` when done.
+
+### 07.yap_mc — hg38 run COMPLETE + summarized; BOTH genomes done
+- All 64 hg38 groups finished (153/153 cells). Ran `yap summary -o yap_mapping_hg38`.
+- Output: `yap_mapping_hg38/stats/MappingSummary.csv.gz` (153 cells x 61 metrics) + AllcPaths.tsv.
+- HCG (CpG) loci per cell (codes/count_hcg_loci.py -> stats/hcg_loci_per_cell.csv):
+  - hg38: median 2,027,124 (min 667k, max 6.03M); median mCG frac 0.808
+  - mm10: median 1,583,506 (min 688k, max 4.59M); median mCG frac 0.765
+- QC: hg38 R1 mapping rate median 70.2%; mm10 66.6%. All sane.
+- yap mc reprocessing of snmCseq2 (249 cells, mixed-species) is COMPLETE.

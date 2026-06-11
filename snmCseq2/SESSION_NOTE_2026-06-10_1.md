@@ -45,3 +45,10 @@ Re-process snmCseq2 (snmC-seq2, mouse mm10, methylation-only, 249 cells) with `y
   (reused %x.%a filenames not yet overwritten for not-yet-restarted array indices).
 - Normal bismark warnings only ("Chromosomal sequence could not be extracted" chrM/_random).
 - Next: allc files -> per-group MappingSummary.csv.gz -> `yap summary` per run dir.
+
+## 23:25 update — BOTH yap runs COMPLETE
+- hg38 (153 cells) + mm10 (96 cells) all groups finished; `yap summary` run for both.
+- MappingSummary.csv.gz: hg38 (153x61), mm10 (96x61). HCG loci computed (count_hcg_loci.py).
+- hg38 HCG median 2.03M (mCG 0.808); mm10 HCG median 1.58M (mCG 0.765).
+- Same-cell check SRR6911624: yap merged CpG = 1,094,176 (mCG 0.756). Old bismark _1-only
+  per-strand was 956,051 (R1 mate only) — not directly comparable (yap = full cell, strand-merged).
