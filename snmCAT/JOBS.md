@@ -69,3 +69,10 @@ squeue -u jmj7858 -j 4307786 -t all
 ### If a task fails
 Inspect `codes/logs/02.mapping/snakemake.<task>.err`, fix, then resubmit just that task:
 `sbatch --array=<task> codes/02.run_snakemake.sh`
+
+## CORRECTION (2026-06-11): 180615 H1/HEK is ALSO non-NOMe
+- 180615 batch mapped (job 4345601, --nome, mapping_180615/, 100 cells). GCH median **1.3%** ≈ HCH background → NOT NOMe.
+- Earlier ID of 180615 as NOMe was WRONG: its GEO **protocol field = "snmCT-seq"** (no "2"); the GpC-MTase
+  text was the generic series extraction blob. 171009=scmCT-seq, 180615=snmCT-seq → both non-NOMe (confirmed by data).
+- The ONLY NOMe (snmC2T-seq) data in GSE140493 is the **brain UMB5577/UMB5580** samples (190305/190321 mCTseq,
+  GSM4167187 protocol field="snmC2T-seq", ~4372 cells). These are human cortex, NOT H1. Not yet verified with data.
