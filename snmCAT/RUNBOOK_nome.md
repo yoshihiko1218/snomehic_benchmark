@@ -8,7 +8,7 @@ BASE = `/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT
 
 ## One-time prerequisites (already done — reuse)
 - STAR index matching the env's STAR (2.7.3a):
-  `/gpfs/projects/b1198/.../reference/hg38/star_2.7.10a_gencode.v36_sjdb100`  (built by `codes/04.build_star_index_2.7.10a.sh`)
+  `/gpfs/projects/b1198/.../reference/hg38/star_2.7.10a_gencode.v36_sjdb100`  (built by `codes/00.build_star_index.sh`)
 - NOMe mapping config `codes/mapping_config_nome.ini`, generated with:
   ```
   yap default-mapping-config --mode mct --barcode_version V2 --nome \
@@ -19,7 +19,7 @@ BASE = `/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT
     --chrom_size_path <ref>/hg38/GCA_000001405.15_GRCh38_no_alt_analysis_set.chrom.sizes
   ```
 
-## Per-batch pipeline (brain snmC2T-seq = codes 15–19)
+## Per-batch pipeline (brain snmC2T-seq = codes 00-05)
 
 ```bash
 cd /gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT
@@ -30,11 +30,11 @@ source ~/.bashrc && conda activate mapping
 awk -F'\t' 'NR>1 && index($3,"190321_mCTseq_hs_29yr"){print $4; n++} n>=100{exit}' meta.tsv > codes/download_list_brain.txt
 
 # 1. Download                -> fastq_brain/
-sbatch codes/15.download_brain.sh                 # SLURM array 1-100%10
+sbatch codes/01.download.sh                 # SLURM array 1-100%10
 #    wait until: ls fastq_brain/*.fastq.gz | wc -l  == 200
 
 # 2. yap-pattern symlinks
-bash codes/16.rename_symlink_brain.sh             # -> *-R[12].fq.gz
+bash codes/02.rename_symlink.sh             # -> *-R[12].fq.gz
 
 # 3. Generate per-cell snakemake (NOMe config)
 yap start-from-cell-fastq -o mapping_brain \
@@ -43,18 +43,18 @@ yap start-from-cell-fastq -o mapping_brain \
 
 # 4. Patch Snakefiles (yap leaves these blank — must inject):
 #    bismark_reference, star_reference, nome_flag_str='--nome'
-bash codes/17.patch_nome_brain.sh
+bash codes/03.patch_snakefiles.sh
 
 # 5. Map (yap mct --nome): one array task per Group
 N=$(grep -cve '^\s*$' mapping_brain/snakemake/snakemake_cmd.txt)
-sbatch --array=1-$N codes/18.run_brain_nome.sh    # bismark + STAR + select-dna --nome + allc
+sbatch --array=1-$N codes/04.run_mapping.sh    # bismark + STAR + select-dna --nome + allc
 #    wait until: ls mapping_brain/Group*/allc/*.allc.tsv.gz | wc -l == 100
 
 # 6. QC summary             -> mapping_brain/stats/MappingSummary.csv.gz
 yap summary -o mapping_brain
 
 # 7. Per-cell HCG/GCH/HCH counts + methylation rates
-sbatch codes/19.collect_brain_gch.sh              # -> mapping_brain/stats/hcg_gch_nome.tsv
+sbatch codes/05.collect_hcg_gch.sh              # -> mapping_brain/stats/hcg_gch_nome.tsv
 ```
 
 ## Outputs

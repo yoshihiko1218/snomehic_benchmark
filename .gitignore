@@ -62,3 +62,11 @@ add_specific.sh
 **/mapping/.slurm_tmp/
 **/mapping_probe*/
 **/codes/logs/
+
+# snmCAT brain NOMe outputs (keep only stats/ tables)
+**/fastq_brain/
+**/mapping_brain/Group*/
+**/mapping_brain/.slurm_tmp/
+**/mapping_brain/snakemake/
+**/mapping_brain/TotalRNAData.h5
+**/mapping_brain/mapping_config.ini

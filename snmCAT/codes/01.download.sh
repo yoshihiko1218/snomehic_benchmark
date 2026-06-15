@@ -7,15 +7,15 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --array=1-100%10
 #SBATCH --job-name=dl_brain
-#SBATCH --output=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/15.download_brain/dl.%a.txt
-#SBATCH --error=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/15.download_brain/dl.%a.err
+#SBATCH --output=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/01.download/dl.%a.txt
+#SBATCH --error=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/01.download/dl.%a.err
 
 # Download 100 cells from 190321_mCTseq_hs_29yr (UMB5580) = snmC2T-seq (NOMe) batch.
 source /home/jmj7858/.bashrc
 BASE="/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT"
 outfolder="${BASE}/fastq_brain"
 listfile="${BASE}/codes/download_list_brain.txt"
-mkdir -p "${outfolder}" "${BASE}/codes/logs/15.download_brain"
+mkdir -p "${outfolder}" "${BASE}/codes/logs/01.download"
 
 line=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "${listfile}")
 echo "Task ${SLURM_ARRAY_TASK_ID}: ${line}"

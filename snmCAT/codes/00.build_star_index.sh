@@ -6,8 +6,8 @@
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=12
 #SBATCH --job-name=star_index_2710a
-#SBATCH --output=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/04.star_index/build.out
-#SBATCH --error=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/04.star_index/build.err
+#SBATCH --output=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/00.star_index/build.out
+#SBATCH --error=/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/snmCAT/codes/logs/00.star_index/build.err
 
 # Build a STAR index with the SAME STAR version yap uses (2.7.10a in the `mapping`
 # env). The existing star_2.7.11b_* index is unreadable by 2.7.10a
