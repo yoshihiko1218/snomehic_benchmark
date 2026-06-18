@@ -10,6 +10,10 @@
   gzipped Hi-C summaries in `sc_nomehic_cellline/gm_sc_new/04.alignment_snakemake/`.
   Renamed `df_all_imr90`→`df_all_gm`. Verified headless: 188 cells, all metrics
   populated, 187/188 pass QC.
+- **GM QC filter:** cell 42 now sets `df_all_gm = df_passed` (187 QC-passing cells),
+  excluding `scNH_GM_4plex_22_S21.TGACCA` (fails GCH/HCG/transrate/cis1kbnum). Per
+  user, the cell's files in `gm_sc_new/` are LEFT in place — only the cell list is
+  filtered. Full table kept as `df_all_gm_unfiltered`.
 
 ## Reorganization (Tier 1; whole-tree move+rewrite was scoped down after risk review)
 Discovered heavy path coupling (hundreds of auto-generated Snakefiles + .snakemake
