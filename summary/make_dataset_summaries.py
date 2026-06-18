@@ -28,19 +28,17 @@ DROP_LOW_OUTLIERS = {"scnomehic"}
 GCH_SRC = {"scnome": "scnome.gch.txt", "snmCAT": "snmCAT.gch.txt",
            "scnomehic": "scnomehic.gch.txt"}
 # scnome's <ds>.hcg.txt/<ds>.gch.txt are keyed per MATE (K562_01_1, K562_01_2 = R1/R2
-# single-end BAMs), which double-counts cells. R1/R2 cover ~the same cytosines, so the
-# correct per-cell value is the UNION (~one mate), not the sum. Use the per-cell QC
-# summary (already combined: HCG_site_count / GCH_site_count over the 23 finalized cells:
-# 12 GM12878 + 11 merged K562). See scnome/SESSION_NOTE_2026-06-09_1.md.
-SCNOME_QC = "/gpfs/projects/b1042/epifluidlab/yoshii/scnomehic_paper/benchmark/scnome/scnome_qc_summary.csv"
+# single-end covs), which double-counts cells; you can't sum them (R1/R2 only partly
+# overlap). Use the per-cell UNION of the two mates, computed with the SAME detection
+# as the other datasets (Bismark CpG/GpC destrand + genome GCG removal) by
+# scnome_loci_percell.py -> scnome.loci_percell.txt (23 cells: 12 GM12878 + 11 merged
+# K562). See scnome/SESSION_NOTE_2026-06-09_1.md.
+SCNOME_PERCELL = os.path.join(OUT, "scnome.loci_percell.txt")
 
 combined, med = [], []
 for ds in DATASETS:
     if ds == "scnome":
-        qc = pd.read_csv(SCNOME_QC)
-        d = pd.DataFrame({"sample": qc["CellID"],
-                          "HCG_n": qc["HCG_site_count"].astype("Int64"),
-                          "GCH_n": qc["GCH_site_count"].astype("Int64")}).sort_values("sample")
+        d = pd.read_csv(SCNOME_PERCELL, sep="\t")[["sample", "HCG_n", "GCH_n"]].sort_values("sample")
         d.to_csv(os.path.join(OUT, f"{ds}.summary.txt"), sep="\t", index=False)
         c = d.copy(); c.insert(0, "dataset", ds)
         combined.append(c[["dataset", "sample", "HCG_n", "GCH_n"]])
