@@ -48,11 +48,18 @@ __pycache__/
 # OS
 .DS_Store
 
-# Temp scripts
+# Temp scripts (now under tools/)
 push_to_github.sh
 push_ssh.sh
 add_all.sh
 add_specific.sh
+tools/push_to_github.sh
+tools/push_ssh.sh
+tools/add_all.sh
+tools/add_specific.sh
+
+# Notebook backups
+summary/_backups/
 
 # snmCAT yap mct outputs (generated)
 **/mapping/Group*/bam/
