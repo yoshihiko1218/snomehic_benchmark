@@ -92,8 +92,13 @@ bhmem `04.bhmem_bam/`). Both consumed by qc.ipynb.
   - cis_n=CisShort+CisLong; cis_gt1kb=CisLong; trans_ratio=Trans/(CisShort+CisLong+Trans).
   - NB: m3C contacts are chimeric split-read (multi-way) — a method-inherent difference
     from the paired-mate contacts of nagano/scnomehic/droplethic.
-- **Metric 1:** `summary/trinuc/snmCseq3.{chrM,chr21}.txt` (from bhmem
-  `04.bhmem_bam/*.calmd.trinuc_methy.*` via `summary/extract_trinuc.py`).
+- **Metric 1:** `summary/trinuc/snmCseq3.{chrM,chr21}.txt` computed **position-level
+  from the YAP allc** via `summary/extract_trinuc_snmCseq3_allc.py` (chr21 file holds
+  chr19 data). The allc context is a 3-mer without the upstream base, so the exact
+  ACT/ACG/GCT trinucleotide is recovered by an mm10 reference lookup (strand-aware).
+  This replaced the earlier read-level bhmem trinuc, which found only ~7 ACT positions
+  per cell on the tiny chrM (-> noisy 0); the allc gives ~72 positions/cell (reliable).
+  snm3C-seq's chrM ACT median is genuinely ~0 (excellent conversion) at good depth.
 - **Loci:** allcools allc (`alignment/stats/AllcPaths.tsv`) → destrand + GCG removal →
   `summary/gch_hcg_counts/snmCseq3.hcg`.
 
