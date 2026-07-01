@@ -103,6 +103,24 @@ TODO (needs qc.ipynb edit + rerun): add snmCAT to readcount(cell48)+mapq30(cell4
   using mean(R1,R2 UniqueMappedReads) & mean(R1,R2 MappingRate) [no MapQ30 cols in
   snmCAT MappingSummary]; optionally fold conversion cells into qc.ipynb.
 
+### Consistency overhaul of metrics 2 & 3 (2026-06-30) — IN PROGRESS (jobs running)
+User audit found the readcount(2)+mapq30(3) panels used INCONSISTENT sources:
+- metric3 denominator mixed (/input vs /mapped); 4 datasets MapQ30, 4 not.
+- metric2: nagano/droplethic used POST-MapQ30 count; scnomehic used raw TotalFragments;
+  dedup stage differed (scnome/smallwood rmdup vs snmCseq2/snmCAT raw); unit differed
+  (Hi-C fragments vs methylation summed-R1+R2 reads vs mean-of-R1R2).
+Decisions (user): metric3 = **MapQ30 rate = MapQ30/mapped**; metric2 = uniquely-mapped
+**before MapQ30**; UNIT = **fragment (per molecule = unique read-name)**; **exclude dups**;
+all computed from the **correct per-cell BAM** with one uniform method.
+- snmCseq2 uses the **YAP final.bam** (deduped, 96/96) per user, not raw Bismark.
+- snmCAT: markdup dna_reads.bam first (no dup flags).
+- droplethic: per-barcode scan of 198G CB-tagged BAM (frag_droplethic.py).
+Code in summary/: frag_counts.py, frag_droplethic.py, frag_jobs/{make_manifests.py,
+frag_array.sh,frag_droplethic.sbatch,collect.py,JOBS.md}. Jobs 5530301-5530308.
+Early consistent rates (MapQ30/mapped): nagano 63.9, smallwood 80, snmCseq3 72.7,
+scnomehic 60. NEXT: collect.py -> frag_counts_all.tsv, then swap metric2/3 sources in
+qc.ipynb + rerun.
+
 ### Conversion-figure + snmCAT integration — DONE (2026-06-30)
 - Edited qc.ipynb (programmatic JSON edit; backup at
   summary/_backups/qc.ipynb.pre_snmCAT_conversion.bak): inserted snmCAT-build cell
@@ -114,3 +132,18 @@ TODO (needs qc.ipynb edit + rerun): add snmCAT to readcount(cell48)+mapq30(cell4
 - snmCAT mapped N=99 cells. Conversion n per dataset verified.
 - Documented in summary/CONVERSION_README.md.
 - NEXT: resume cleanup at benchmark 4/10 = scnome (per earlier plan), and/or commit.
+
+### Consistency finalization (2026-06-30 late)
+- frag_counts_all.tsv complete (both dedup versions, all 8 datasets, 4238 cells).
+- snmCseq3 contacts: BOTH MapQ10 (YAP MappingSummary) and MapQ30 (regenerated via
+  `yap-internal generate-contacts` on q30-filtered 3C.sorted.bam), job 5541098 done.
+  Corrected earlier error: YAP CisLong = 1kb (min_gap=1000), not 2.5kb.
+- Dedup methods: markdup (most) / picard REMOVE_DUPLICATES (YAP snmCseq3+snmCseq2) /
+  pairtools (droplethic) — all position-based, biologically equivalent.
+- FINDING: droplethic never deduped (pairparse total_dups=0) -> values are pre-dedup.
+  Dedup job written (summary/frag_jobs/droplethic_dedup.sbatch) but NOT run; user chose
+  keep-as-is + document.
+- dist_check.py: cross-tech distributions sane; outliers = real biology.
+- Wrote analysis_pipeline.md (root): per-technology metric derivation + caveats.
+- Metric DEFINITIONS all biologically consistent; only open item = droplethic dedup
+  (documented). qc.ipynb figure integration of metrics 2/3 + snmCseq3 contacts still pending.
