@@ -18,74 +18,75 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "benchmark_data_s
 # Sheet 1 — Datasets (one row per benchmark dataset folder)
 # ---------------------------------------------------------------------------
 DATASET_COLS = [
-    "Folder", "Method / technology", "Publication (source)", "Genome",
+    "Folder", "Method / technology", "Publication (source)", "Publication DOI", "Genome",
     "Cell type / tissue", "Modalities",
     "Cells listed", "Cells used in benchmark",
-    "SRA / GEO accessions", "Pipeline / aligner", "Role & notes",
+    "GEO accession", "SRA accessions", "Pipeline / aligner", "Role & notes",
 ]
 
 DATASETS = [
-    ["scnomehic/", "scNOMe-HiC (this method)", "This study", "hg38",
+    ["scnomehic/", "scNOMe-HiC (this method)", "This study (unpublished)", "-", "hg38",
      "GM12878 (lymphoblastoid cell line)", "CpG meth (HCG) + GpC accessibility (GCH) + Hi-C",
      "188", "187 (QC-pass)",
+     "-  (not yet deposited)",
      "In-house (scNH_GM_4plex_*); bhmem output external at b1198 gm_sc_new",
      "TrimGalore -> bhmem (bisulfitehic BWA-MEM) -> markdup/calmd; YAP bowtie2 arm as local comparison",
      "The published method being benchmarked. Three modalities. bhmem is the method aligner (external); local YAP/bowtie2 arm feeds mapping/Hi-C QC."],
 
-    ["nagano/", "Nagano scHi-C", "Nagano et al. 2013", "mm10",
-     "Mouse ESC (single cells)", "Hi-C only (no methylation)",
+    ["nagano/", "Nagano scHi-C", "Nagano et al. 2013, Nature", "10.1038/nature12593", "mm10",
+     "Mouse Th1 cells (single cells)", "Hi-C only (no methylation)",
      "15", "15",
-     "SRR921526-SRR921540", "fastp -> bwa-mem2 -SP5M -> samtools markdup -> pairtools",
+     "GSE48262", "SRR921526-SRR921540", "fastp -> bwa-mem2 -SP5M -> samtools markdup -> pairtools",
      "Early pure scHi-C reference. High trans_ratio (~0.17) is a real quality signature of this early assay."],
 
-    ["droplethic/", "Droplet Hi-C", "Chang et al. 2025", "hg38",
-     "Cell line (barcoded droplets)", "Hi-C only",
+    ["droplethic/", "Droplet Hi-C", "Chang et al. 2025, Nat Biotechnol", "10.1038/s41587-024-02447-1", "hg38",
+     "Human cell-line mixing (barcoded droplets)", "Hi-C only",
      "~688k barcodes", "3,668 valid barcodes",
-     "SRR27586278, SRR27586279", "Rupture: TrimGalore -> bowtie1 barcode -> bwa mem -SP5M -> CB-tag -> pairtools",
+     "GSE253407 (PRJNA1065475)", "SRR27586278, SRR27586279", "Rupture: TrimGalore -> bowtie1 barcode -> bwa mem -SP5M -> CB-tag -> pairtools",
      "High-throughput droplet Hi-C. CAVEAT: pairtools dedup not run -> values are currently pre-dedup (kept as-is by decision 2026-06-30)."],
 
-    ["scnome/", "scNOMe-seq", "Pott 2017", "hg38",
+    ["scnome/", "scNOMe-seq", "Pott 2017, eLife", "10.7554/eLife.23203", "hg38",
      "GM12878 + K562 (cell lines)", "CpG meth (HCG) + GpC accessibility (GCH); no Hi-C",
      "34 runs (after control removal)", "23 cells (12 GM12878 + 11 merged K562)",
-     "SRR3729642-SRR3729653 (GM12878); SRR3729661-SRR3729682 (K562); SRR3729654-3729660 = excluded spike-in controls",
+     "GSE83882", "SRR3729642-SRR3729653 (GM12878); SRR3729661-SRR3729682 (K562); SRR3729654-3729660 = excluded spike-in controls",
      "TrimGalore -> Bismark SE per-mate (--non_directional) -> markdup -> coverage2cytosine --nome-seq",
      "NOMe method (CpG + GCH accessibility). K562 has 2 runs/cell merged into 11 cells; controls excluded."],
 
-    ["snmCseq2/", "snmC-seq2", "Luo 2018", "hg38 + mm10",
+    ["snmCseq2/", "snmC-seq2", "Luo et al. 2018, Nat Commun", "10.1038/s41467-018-06355-2", "hg38 + mm10",
      "Mixed species single cells", "CpG methylation only (not NOMe, no GCH); no Hi-C",
      "249 (153 hg38 + 96 mm10)", "mm10 subset = 96",
-     "SRR6911624 ... (250-line acc_list)", "cutadapt -> Bismark SE per-mate -> dedup -> methyl-extractor; parallel YAP mc arm",
+     "GSE112471", "SRR6911624 ... (250-line acc_list)", "cutadapt -> Bismark SE per-mate -> dedup -> methyl-extractor; parallel YAP mc arm",
      "CpG-only methylome. mm10 subset used for the benchmark figures."],
 
-    ["snmCseq3/", "snm3C-seq", "Liu 2023", "mm10",
-     "Mouse single cells", "CpG methylation + Hi-C (m3C chimeric split-read contacts)",
+    ["snmCseq3/", "snm3C-seq", "Liu et al. 2023, Nature", "10.1038/s41586-023-06805-y", "mm10",
+     "Mouse brain (single nuclei)", "CpG methylation + Hi-C (m3C chimeric split-read contacts)",
      "1,379 in SRA pool (100 aligned)", "98",
-     "SRR21549289 ... (1379-line acc_list)", "cutadapt -> YAP bismark+bowtie2 m3C (alignment/) AND bhmem (04.bhmem_bam/)",
+     "GSE213259 (PRJNA880294)", "SRR21549289 ... (1379-line acc_list)", "cutadapt -> YAP bismark+bowtie2 m3C (alignment/) AND bhmem (04.bhmem_bam/)",
      "Combined methylome + Hi-C. Final figures: align+contacts from YAP, conversion+HCG loci from bhmem. Contacts are chimeric multi-way (method-inherent difference)."],
 
-    ["smallwood/", "Smallwood scBS-seq (scWGBS)", "Smallwood 2014", "mm10",
+    ["smallwood/", "Smallwood scBS-seq (scWGBS)", "Smallwood et al. 2014, Nat Methods", "10.1038/nmeth.3035", "mm10",
      "Mouse ESC (single cells)", "CpG methylation only (WGBS); no Hi-C, no GCH",
      "51", "51",
-     "SRR1248444 ... (51-line acc_list)", "TrimGalore -> Bismark (hg38 contamination depletion -> mm10 SE) -> markdup -> cov + BisSNP",
+     "GSE56879", "SRR1248444 ... (51-line acc_list)", "TrimGalore -> Bismark (hg38 contamination depletion -> mm10 SE) -> markdup -> cov + BisSNP",
      "Whole-genome bisulfite single-cell reference (no accessibility, no Hi-C)."],
 
-    ["snmCAT/", "snmC2T-seq / snmCAT-seq (NOMe)", "Luo 2022", "hg38",
+    ["snmCAT/", "snmC2T-seq / snmCAT-seq (NOMe)", "Luo et al. 2022, Cell Genomics", "10.1016/j.xgen.2022.100107", "hg38",
      "Human frontal cortex, donor UMB5580 (batch 190321)", "CpG meth (HCG) + GpC accessibility (GCH) + RNA (transcriptome)",
      "100", "99",
-     "GSE140493 (SRR* per cells_brain.tsv)", "YAP mct --nome (bismark methylome + STAR transcriptome + allcools)",
+     "GSE140493", "SRR* per cells_brain.tsv (subset of GSE140493)", "YAP mct --nome (bismark methylome + STAR transcriptome + allcools)",
      "Multi-omic NOMe brain data. NB: autosomal non-CpG is elevated by real brain neuronal mCH, not conversion failure. Median HCG 81.2% / GCH 15.1%."],
 
-    ["methylhic/", "Methyl-HiC", "Li et al. 2019", "mm10",
-     "Single cells", "CpG methylation + Hi-C",
+    ["methylhic/", "Methyl-HiC", "Li et al. 2019, Nat Methods", "10.1038/s41592-019-0502-z", "mm10",
+     "Mouse ESC (single cells)", "CpG methylation + Hi-C",
      "59", "Excluded from current figures",
-     "SRR7770822 ... (59-line acc_list)", "YAP (m3C)",
+     "GSE119171", "SRR7770822 ... (59-line acc_list)", "YAP (m3C)",
      "Excluded from the current benchmark figures per user decision."],
 
-    ["methylhic_new/", "Methyl-HiC (newer batch)", "Li et al. 2019 (newer batch)", "mm10",
+    ["methylhic_new/", "Methyl-HiC (newer batch)", "Methyl-HiC (in-house batch)", "10.1038/s41592-019-0502-z (method)", "mm10",
      "Single cells", "CpG methylation + Hi-C",
      "96", "Excluded from current figures",
-     "In-house sample IDs (sc_*_CKDL*, 96-line acc_list)", "Snakemake per-Group alignment",
-     "Newer Methyl-HiC batch; also excluded from current benchmark figures per user decision."],
+     "In-house (not deposited; Novogene CKDL IDs)", "In-house sample IDs (sc_*_CKDL*, 96-line acc_list)", "Snakemake per-Group alignment",
+     "Newer Methyl-HiC batch; also excluded from the current benchmark figures per user decision."],
 ]
 
 # ---------------------------------------------------------------------------
@@ -155,7 +156,7 @@ def write_sheet(ws, title, columns, rows, widths, wrap_cols, row_fill=None):
 def dataset_fill(row, i):
     if "this method" in row[1].lower():
         return THIS_METHOD_FILL
-    if "excluded" in str(row[7]).lower():
+    if "excluded" in str(row[8]).lower():
         return EXCLUDED_FILL
     return ALT_FILL if i % 2 else None
 
@@ -166,8 +167,8 @@ ws1 = wb.active
 ws1.title = "Datasets"
 write_sheet(
     ws1, "scNOME-HiC Benchmark - Datasets used", DATASET_COLS, DATASETS,
-    widths=[15, 26, 22, 13, 26, 34, 16, 20, 40, 46, 60],
-    wrap_cols={1, 2, 4, 5, 8, 9, 10},
+    widths=[15, 26, 26, 24, 13, 26, 34, 16, 20, 24, 40, 46, 60],
+    wrap_cols={1, 2, 3, 5, 6, 9, 10, 11, 12},
     row_fill=dataset_fill,
 )
 # legend note under the table

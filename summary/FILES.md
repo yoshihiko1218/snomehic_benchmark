@@ -7,9 +7,11 @@ QC summary, cross-technology comparison, and the `qc.ipynb` notebook.
   facts distilled across every dataset folder's `FILES.md`/`RESULTS.md`, the
   top-level `README.md`, `PROJECT_CONTEXT.md`, and `analysis_pipeline.md`.
 - **benchmark_data_summary.xlsx** — Excel summary of the data used in the benchmark.
-  Sheets: **Datasets** (one row per dataset: method, publication, genome, cell
-  type, modalities, cell counts, accessions, pipeline, notes), **QC metrics**
-  (the 6 metrics + HCG/GCH loci), **Caveats** (method-inherent caveats).
+  Sheets: **Datasets** (one row per dataset: method, publication, **publication DOI**,
+  genome, cell type, modalities, cell counts, **GEO accession**, SRA accessions,
+  pipeline, notes), **QC metrics** (the 6 metrics + HCG/GCH loci), **Caveats**
+  (method-inherent caveats). GEO/DOI verified against NCBI GEO/BioProject and the
+  source publications (2026-07).
 
 ## Notebook
 - **qc.ipynb** — master QC notebook. Loads per-cell metrics for every method
